@@ -52,7 +52,7 @@ class DisciplineGroup extends BaseEntity
      *   @ORM\JoinColumn(name="discipline_id", referencedColumnName="id")
      * })
      */
-    protected $discipline;
+    protected $disciplinePlan;
 
     /**
      * @return Group
@@ -89,17 +89,17 @@ class DisciplineGroup extends BaseEntity
     /**
      * @return Discipline
      */
-    public function getDiscipline()
+    public function getDisciplinePlan()
     {
-        return $this->discipline;
+        return $this->disciplinePlan;
     }
 
     /**
-     * @param Discipline $discipline
+     * @param Discipline $disciplinePlan
      */
-    public function setDiscipline($discipline)
+    public function setDisciplinePlan($disciplinePlan)
     {
-        $this->discipline = $discipline;
+        $this->disciplinePlan = $disciplinePlan;
     }
 
 }

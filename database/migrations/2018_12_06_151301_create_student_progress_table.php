@@ -19,7 +19,7 @@ class CreateStudentProgressTable extends Migration {
 			$table->integer('student_id')->unsigned()->nullable()->index('student_progress_student_id_foreign');
 			$table->string('occupation_type', 50)->nullable();
 			$table->smallInteger('work_number')->nullable();
-			$table->string('visit_status', 20)->nullable();
+			$table->string('work_mark', 20)->nullable();
 		});
 	}
 

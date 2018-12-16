@@ -16,7 +16,7 @@ class CreateDisciplineGroupTable extends Migration {
 		{
 			$table->integer('id', true);
 			$table->integer('group_id')->unsigned()->nullable()->index('discipline_group_group_id_foreign');
-			$table->integer('discipline_id')->unsigned()->nullable()->index('discipline_group_discipline_id_foreign');
+			$table->integer('discipline_plan_id')->nullable()->index('discipline_group_discipline_plan_id_foreign');
 			$table->integer('studyplan_id')->unsigned()->nullable()->index('discipline_group_studyplan_id_foreign');
 		});
 	}

@@ -5,41 +5,41 @@
 /**
  * StudentAttendance
  */
-class StudentAttendance
+class StudentAttendance extends BaseEntity
 {
     /**
      * @var integer
      */
-    private $occupationType;
+    protected $occupationType;
 
     /**
      * @var integer
      */
-    private $occupationNumber;
+    protected $occupationNumber;
 
     /**
      * @var boolean
      */
-    private $visitStatus;
+    protected $visitStatus;
 
-    private $disciplineGroup;
+    protected $disciplineGroup;
 
-    private $studentGroup;
+    protected $studentGroup;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \User
      */
-    private $student;
+    protected $student;
 
     /**
      * @var \DisciplineGroup
      */
-    private $discipline_group;
+    protected $discipline_group;
 
     /**
      * @return int
@@ -73,21 +73,6 @@ class StudentAttendance
         $this->occupationNumber = $occupationNumber;
     }
 
-    /**
-     * @return bool
-     */
-    public function isWasVisited()
-    {
-        return $this->wasVisited;
-    }
-
-    /**
-     * @param bool $wasVisited
-     */
-    public function setWasVisited($wasVisited)
-    {
-        $this->wasVisited = $wasVisited;
-    }
 
     /**
      * @return User
@@ -127,6 +112,38 @@ class StudentAttendance
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisitStatus()
+    {
+        return $this->visitStatus;
+    }
+
+    /**
+     * @param bool $visitStatus
+     */
+    public function setVisitStatus($visitStatus)
+    {
+        $this->visitStatus = $visitStatus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStudentGroup()
+    {
+        return $this->studentGroup;
+    }
+
+    /**
+     * @param mixed $studentGroup
+     */
+    public function setStudentGroup($studentGroup)
+    {
+        $this->studentGroup = $studentGroup;
     }
 
 

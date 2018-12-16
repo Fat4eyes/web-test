@@ -18,7 +18,7 @@
                 <option name="unsigned"/>
             </options>
         </field>
-        <field name="workMark" type="string" column="visit_status" length="20" nullable="true">
+        <field name="workMark" type="string" column="work_mark" length="20" nullable="true">
             <options>
                 <option name="fixed"/>
             </options>

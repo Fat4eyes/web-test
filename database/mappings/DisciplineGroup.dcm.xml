@@ -3,7 +3,7 @@
     <entity name="DisciplineGroup" table="discipline_group">
         <indexes>
             <index name="discipline_group_group_id_foreign" columns="group_id"/>
-            <index name="discipline_group_discipline_id_foreign" columns="discipline_id"/>
+            <index name="discipline_group_discipline_plan_id_foreign" columns="discipline_plan_id"/>
         </indexes>
         <id name="id" type="integer" column="id">
             <generator strategy="IDENTITY"/>
@@ -13,9 +13,9 @@
                 <join-column name="group_id" referenced-column-name="id"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="discipline" target-entity="Discipline" fetch="LAZY">
+        <many-to-one field="disciplinePlan" target-entity="DisciplinePlan" fetch="LAZY">
             <join-columns>
-                <join-column name="discipline_id" referenced-column-name="id"/>
+                <join-column name="discipline_plan_id" referenced-column-name="id"/>
             </join-columns>
         </many-to-one>
     </entity>
