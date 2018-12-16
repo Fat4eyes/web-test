@@ -72,7 +72,7 @@ $(document).ready(function () {
                       studyPlanId: self.current.planId(),
                       disciplineId: self.current.discipline().disciplineId()
                   })
-              },
+                },
                 fill: function(d){
                   self.current.discipline().id(d.id()).hours(d.hours())
                       .startSemester(d.startSemester()).semestersCount(d.semestersCount())

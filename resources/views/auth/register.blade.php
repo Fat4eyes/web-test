@@ -48,7 +48,8 @@
         </div>
         <div>
             <select id="sAuthGroup" validate
-                     data-bind="options: groups, optionsText: 'name',
+                     data-bind="options: groups,
+                     optionsText: i => i.year() ? i.year() + ' ' + i.name() : i.name() ,
                      value: user().group,
                      optionsCaption: 'Выберите группу',
                      validationElement: user().group,
