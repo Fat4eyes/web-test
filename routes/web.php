@@ -75,6 +75,13 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole:'.UserRole::Admin.'
             Route::get('notest', function(){return View('help.notest');});
             Route::get('results', function(){return View('help.results');});
         });
+
+    Route::group(["prefix" => "students"], function () {
+        Route::group(["prefix" => "transfer"], function () {
+            Route::post("/next", "StudentApiController@transferToNextCourse");
+            Route::post("/next/all", "StudentApiController@transferAllToNextCourse");
+        });
+    });
 });
 
 
@@ -470,14 +477,5 @@ Route::group(['prefix' => 'api'], function() {
             ->middleware('checkIP');
         Route::post('createGivenAnswer', 'TestResultController@createGivenAnswer')
             ->middleware('checkIP');
-    });
-});
-
-Route::group(["prefix" => "admin"], function () {
-    Route::group(["prefix" => "students"], function () {
-        Route::group(["prefix" => "transfer"], function () {
-            Route::post("/next", "StudentApiController@transferToNextCourse")
-                ->middleware('checkRole:'.UserRole::Admin.'|'.UserRole::Lecturer);
-        });
     });
 });

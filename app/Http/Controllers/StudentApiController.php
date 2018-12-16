@@ -24,4 +24,13 @@ class StudentApiController extends ApiController
             return $this->error($exception->getMessage());
         }
     }
+
+    public function transferAllToNextCourse() {
+        try {
+            $this->_studentService->transferAllToNextCourse();
+            return $this->ok();
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
 }

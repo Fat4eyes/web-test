@@ -18,6 +18,16 @@ class StudentService
         $this->_unitOfWork = $unitOfWork;
     }
 
+    public function transferAllToNextCourse() {
+        $students = $this->_unitOfWork->users()
+            ->getStudentsWhichCanTransferToNextCourse();
+        foreach ($students as $student) {
+            try {
+                $this->transferStudentToNextCourse($student);
+            } catch (Exception $exception) { }
+        }
+    }
+
     public function transferToNextCourse($studentIds)
     {
         $group = null;
@@ -67,11 +77,48 @@ class StudentService
 
         // Если в группе больше не осталось студентов, удаляем ее.
         if (count($this->_unitOfWork->users()->getGroupStudents($group->getId())) === 0) {
-            $this->_entityManager->remove($group);
-            $this->_entityManager->flush();
+            $this->removeGroup($group);
         }
 
         return $newGroup;
+    }
+
+    private function transferStudentToNextCourse($student)
+    {
+        $studentId = $student->getId();
+
+        $studentGroup = $this->_unitOfWork->studentGroups()
+            ->getByStudentId($studentId);
+
+        if ($studentGroup == null) {
+            throw new Exception("Группа не найдена. Идентификатор студента: $studentId.");
+        }
+
+        $group = $studentGroup->getGroup();
+
+        if ($group->getCourse() >= 4) {
+            return;
+        }
+
+        // Если группа, в которую будет осуществляется перевод, еще не существует.
+        if ($this->getNextGroup($group) == null) {
+            // Создаем ее.
+            $newGroup = $this->createNextGroup($group);
+            // Сохраняем.
+            $this->_entityManager->persist($newGroup);
+            $this->_entityManager->flush();
+        } else {
+            // Если группа уже есть, то используем ее.
+            $newGroup = $this->getNextGroup($group);
+        }
+
+        $studentGroup->setGroup($newGroup);
+        $this->_entityManager->flush($studentGroup);
+
+        // Если в группе больше не осталось студентов, удаляем ее.
+        if (count($this->_unitOfWork->users()->getGroupStudents($group->getId())) === 0) {
+            $this->removeGroup($group);
+        }
     }
 
     private function createNextGroup(Group $model) {
@@ -103,5 +150,10 @@ class StudentService
         $prefix = $group->getPrefix();
         return $this->_unitOfWork->groups()
             ->findBy($year, $course, $prefix, $number);
+    }
+
+    private function removeGroup(Group $group) {
+        $this->_entityManager->remove($group);
+        $this->_entityManager->flush();
     }
 }

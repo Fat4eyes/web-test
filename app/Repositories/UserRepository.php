@@ -68,6 +68,14 @@ class UserRepository extends BaseRepository implements IUserRepository
         return $query->getQuery()->execute();
     }
 
+    public function getStudentsWhichCanTransferToNextCourse() {
+        $query = $this->repo->createQueryBuilder('u')
+            ->join(StudentGroup::class, 'sg', Join::WITH, 'sg.student = u.id')
+            ->join(Group::class, 'g', Join::WITH, "g.id = sg.group")
+            ->where('g.course < 4');
+        return $query->getQuery()->execute();
+    }
+
     public function setUserRole($userId, $roleId){
         DB::table('role_user')
             ->insert(  array(
