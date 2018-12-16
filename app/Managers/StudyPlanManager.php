@@ -63,13 +63,15 @@ class StudyPlanManager
             ->getPlansDisciplinesByStudyplanAndNamePaginated($pageSize, $pageNum, $studyplanId, $name);
     }
 
-    public function createDisciplinePlan(DisciplinePlan $disciplinePlan, $studyPlanId, $disciplineId){
+    public function createDisciplinePlan(DisciplinePlan $disciplinePlan, $studyPlanId, $disciplineId, $semester)
+    {
+        $existingSemesterDisciplinePlan = $this->_unitOfWork->disciplinePlans()
+            ->where("DisciplinePlan.studyplan = $studyPlanId 
+            AND DisciplinePlan.discipline = $disciplineId 
+            AND DisciplinePlan.semester = $semester");
 
-        $existingDisciplinePlan = $this->_unitOfWork->disciplinePlans()
-            ->where("DisciplinePlan.studyplan = $studyPlanId AND DisciplinePlan.discipline = $disciplineId");
-
-        if (!empty($existingDisciplinePlan)){
-            throw new Exception("Указанная дисциплина уже содержится в данном учебном плане!");
+        if (!empty($existingSemesterDisciplinePlan)){
+            throw new Exception("Указанный семестр дисциплины  уже содержится в данном учебном плане!");
         }
 
         $studyPlan = $this->_unitOfWork->studyPlans()->find($studyPlanId);
@@ -81,7 +83,17 @@ class StudyPlanManager
         $this->_unitOfWork->commit();
     }
 
-    public function updateDisciplinePlan(DisciplinePlan $disciplinePlan, $studyPlanId, $disciplineId){
+    public function updateDisciplinePlan(DisciplinePlan $disciplinePlan, $studyPlanId, $disciplineId, $semester){
+        $disciplinePlanId = $disciplinePlan->getid();
+        $existingSemesterDisciplinePlan = $this->_unitOfWork->disciplinePlans()
+            ->where("DisciplinePlan.studyplan = $studyPlanId 
+            AND DisciplinePlan.discipline = $disciplineId 
+            AND DisciplinePlan.semester = $semester
+            AND DisciplinePlan.id != $disciplinePlanId");
+
+        if (!empty($existingSemesterDisciplinePlan)){
+            throw new Exception("Указанный семестр данной дисциплины  уже содержится в учебном плане!");
+        }
         $studyPlan = $this->_unitOfWork->studyPlans()->find($studyPlanId);
         $discipline = $this->_unitOfWork->disciplines()->find($disciplineId);
         $disciplinePlan->setStudyplan($studyPlan);

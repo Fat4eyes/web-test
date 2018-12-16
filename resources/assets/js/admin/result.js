@@ -5,8 +5,8 @@ $(document).ready(function(){
             var self = this;
 
             initializeViewModel.call(self, {
-                page: menu.admin.results
-            });
+                        page: menu.admin.results
+                    });
 
             self.current = {
                 result: ko.observable(),
@@ -30,9 +30,6 @@ $(document).ready(function(){
                         text: ko.observable()
                     }),
                     rightPercentage: ko.observable()
-                }),
-                question: ko.observable({
-                    type: 0
                 }),
                 mark: {
                     isInput: ko.observable(false),
@@ -127,21 +124,9 @@ $(document).ready(function(){
             };
 
             self.get = {
-                question: id => {
-                    $ajaxget({
-                        url: '/api/questions/' + id,
-                        errors: self.errors,
-                        successCallback: function(data){
-                            self.current.question({
-                                type: data.question.type(),
-                                answers: data.answers()
-                            });
-                        }
-                    });
-                },
                 result: function(){
                     var url = window.location.href;
-                    var id = + url.substr(url.lastIndexOf('/') + 1);
+                    var id = +url.substr(url.lastIndexOf('/')+1);
 
                     $ajaxget({
                         url: '/api/results/' + id,
@@ -219,11 +204,6 @@ $(document).ready(function(){
                     });
                 }
             };
-
-
-            self.current.answer().question.subscribe((q) => {
-                self.get.question(q.id());
-            });
 
             self.get.result();
             self.get.markScale();

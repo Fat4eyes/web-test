@@ -11,8 +11,27 @@
     <link rel="stylesheet" href="{{ URL::asset('css/simple.css')}}"/>
     <link rel="stylesheet" href="{{ URL::asset('css/admin.css')}}" />
     <link rel="stylesheet" href="{{ URL::asset('css/jquery-ui.css')}}" />
+    <link rel="stylesheet" href="{{ URL::asset('packages/barryvdh/elfinder/css/elfinder.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('packages/barryvdh/elfinder/css/theme.css') }}">
 
     <script src="{{ URL::asset('js/min/manager-common.js')}}"></script>
+    {{--<script src="{{ URL::asset('js/es5-shim.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/jquery-3.1.1.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/jquery.cookie.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/knockout-3.4.0.debug.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/knockout.validation.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/knockout.mapping.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/ru-RU.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/ko-postget.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/tooltipster.bundle.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/jquery.arcticmodal.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/common.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/ko-copy.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/ko-pager.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/modals.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/ko-events.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/tooltip.js')}}"></script>--}}
+    {{--<script src="{{ URL::asset('js/helpers/user-info.js')}}"></script>--}}
     @yield('javascript')
 </head>
 <body>
@@ -30,6 +49,7 @@
         <a href="/admin/disciplines" data-bind="css: {'current': $root.page() === menu.admin.disciplines}">Дисциплины</a>
         <a href="/admin/tests" data-bind="css: {'current': $root.page() === menu.admin.tests}">Тесты</a>
         <a href="/admin/results" data-bind="css: {'current': $root.page() === menu.admin.results}">Результаты</a>
+        <a href="/admin/performance" data-bind="css: {'current': $root.page() === menu.admin.performance}">Успеваемость</a>
         <a href="/admin/materials" data-bind="css: {'current': $root.page() === menu.admin.materials}">Материалы</a>
         <a  class="user" data-bind="text: $root.user.name()"></a>
         <div class="menu-dd">
