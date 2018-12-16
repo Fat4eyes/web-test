@@ -39,8 +39,15 @@ class StudentService
             $studentGroup = $this->_unitOfWork->studentGroups()
                 ->getByStudentId($studentId);
 
+            $oldGroup = $studentGroup->getGroup();
+
             $studentGroup->setGroup($group);
             $this->_entityManager->flush($studentGroup);
+
+            // Если в группе больше не осталось студентов, удаляем ее.
+            if (count($this->_unitOfWork->users()->getGroupStudents($oldGroup->getId())) === 0) {
+                $this->removeGroup($oldGroup);
+            }
         }
     }
 
