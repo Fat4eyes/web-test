@@ -220,23 +220,23 @@ class DisciplineGroup extends \DisciplineGroup implements \Doctrine\ORM\Proxy\Pr
     /**
      * {@inheritDoc}
      */
-    public function getDiscipline()
+    public function getDisciplinePlan()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDiscipline', []);
 
-        return parent::getDiscipline();
+        return parent::getDisciplinePlan();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setDiscipline($discipline)
+    public function setDisciplinePlan($discipline)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDiscipline', [$discipline]);
 
-        return parent::setDiscipline($discipline);
+        return parent::setDisciplinePlan($discipline);
     }
 
     /**

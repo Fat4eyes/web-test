@@ -195,6 +195,45 @@ Route::group(['prefix' => 'api'], function() {
         });
     });
 
+
+    /*------------------------------------------------------------------------------
+     *                       УСПЕХИ СТУДЕНТОВ
+     * -----------------------------------------------------------------------------
+     */
+    Route::group(['prefix' => 'performance',
+        'middleware' => 'checkRole:'.UserRole::Admin.'|'.UserRole::Lecturer],
+        function () {
+//            Route::get('{id}', 'PerformanceController@getPlan');
+//            Route::get('group/{id}', 'PerformanceController@getPerformanceByGroupName');
+//            Route::get('{id}/disciplines', 'PerformanceController@getPlanDisciplines');
+//            Route::post('create', 'PerformanceController@create');
+//            Route::post('update', 'PerformanceController@update');
+//            Route::post('delete/{id}', 'PerformanceController@delete');
+            Route::get('show', 'PerformanceController@getPerformanceByGroupName');//getStudentsPerformanceByDisciplineAndGroup
+
+            /*------------------------------------------------------------------------
+            *                      Работа с дисциплинами планов                      */
+
+            Route::group(['prefix' => 'discipline'], function () {
+                Route::get('{id}/marks', 'PerformanceController@getDisciplinePlanMarkTypes');
+                Route::post('show', 'PerformanceController@getPlansDisciplinesByStudyplanAndNamePaginated');
+                Route::post('create', 'PerformanceController@addDisciplinePlan');
+                Route::post('update', 'PerformanceController@updateDisciplinePlan');
+                Route::post('delete/{id}', 'PerformanceController@deleteDisciplinePlan');
+            });
+
+            /*------------------------------------------------------------------------
+            *                      Работа с оценками по дисциплинам планов           */
+
+            Route::group(['prefix' => 'mark'], function () {
+                Route::post('create', 'PerformanceController@addDisciplinePlan');
+                Route::post('update', 'PerformanceController@updateDisciplinePlan');
+                Route::post('delete/{id}', 'PerformanceController@deleteDisciplinePlan');
+                Route::post('linkTest', 'PerformanceController@linkMarkToTest');
+            });
+        });
+
+
     /*-----------------------------------------------------------------------------
      *                           ГРУППЫ
      *-----------------------------------------------------------------------------
@@ -238,7 +277,7 @@ Route::group(['prefix' => 'api'], function() {
             ->middleware('checkRole:'.UserRole::Admin);
         Route::post('delete/{id}', 'DisciplineController@delete')
             ->middleware('checkRole:'.UserRole::Admin);
-        Route::get('show', 'DisciplineController@getByNameAndProfilePaginated');
+            Route::get('show', 'DisciplineController@getByNameAndProfilePaginated');
         Route::get('actual', 'DisciplineController@getActualDisciplinesForStudent');
         Route::get('testresults', 'DisciplineController@getDisciplinesWhereTestsPassed');
         Route::get('name/{name}','DisciplineController@getByName');

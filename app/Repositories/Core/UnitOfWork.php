@@ -48,6 +48,8 @@ class UnitOfWork
     private $_dockerInfoRepo;
     private $_mediaRepo;
     private $_mediableRepo;
+    private $_studentAttendanceRepo;
+    private $_studentProgressRepo;
 
     public function users(){
         if ($this->_userRepo == null){
@@ -97,6 +99,21 @@ class UnitOfWork
         }
         return $this->_studyPlanRepo;
     }
+
+    public function studentAttendances(){
+        if ($this->_studentAttendanceRepo == null){
+            $this->_studentAttendanceRepo = new StudentAttendanceRepository($this->_em);
+        }
+        return $this->_studentAttendanceRepo;
+    }
+
+    public function studentProgresses(){
+        if ($this->_studentProgressRepo == null){
+            $this->_studentProgressRepo = new StudentProgressRepository($this->_em);
+        }
+        return $this->_studentProgressRepo;
+    }
+
 
     public function themes(){
         if ($this->_themeRepo == null){
