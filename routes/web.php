@@ -80,6 +80,7 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole:'.UserRole::Admin.'
         Route::group(["prefix" => "transfer"], function () {
             Route::post("/next", "StudentApiController@transferToNextCourse");
             Route::post("/next/all", "StudentApiController@transferAllToNextCourse");
+            Route::post("/group/{groupId}", "StudentApiController@transferStudentsToGroup");
         });
     });
 });

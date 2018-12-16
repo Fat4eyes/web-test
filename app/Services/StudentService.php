@@ -18,6 +18,32 @@ class StudentService
         $this->_unitOfWork = $unitOfWork;
     }
 
+    public function transferStudentsToGroup($studentIds, $groupId)
+    {
+        foreach ($studentIds as $studentId)
+        {
+            $student = $this->_unitOfWork->users()
+                ->find($studentId);
+
+            if ($student == null) {
+                throw new Exception("Студент не найден. Идентификатор студента: $studentId.");
+            }
+
+            $group = $this->_unitOfWork->groups()
+                ->find($groupId);
+
+            if ($group == null) {
+                throw new Exception("Группа не найдена. Идентификатор группы: $groupId.");
+            }
+
+            $studentGroup = $this->_unitOfWork->studentGroups()
+                ->getByStudentId($studentId);
+
+            $studentGroup->setGroup($group);
+            $this->_entityManager->flush($studentGroup);
+        }
+    }
+
     public function transferAllToNextCourse() {
         $students = $this->_unitOfWork->users()
             ->getStudentsWhichCanTransferToNextCourse();

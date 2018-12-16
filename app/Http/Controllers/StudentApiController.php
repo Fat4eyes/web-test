@@ -33,4 +33,14 @@ class StudentApiController extends ApiController
             return $this->error($exception->getMessage());
         }
     }
+
+    public function transferStudentsToGroup($groupId) {
+        try {
+            $studentIds = (array) Input::get("studentIds");
+            $this->_studentService->transferStudentsToGroup($studentIds, $groupId);
+            return $this->ok();
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
 }
