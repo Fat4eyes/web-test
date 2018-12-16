@@ -166,9 +166,21 @@
                 <h3>Детальный просмотр ответа</h3>
             </div>
             <div class="layer-body zero-margin">
+                <!-- ko if: $root.current.question().type === 1 || $root.current.question().type === 2 -->
+                <div data-bind="foreach: $root.current.question().answers">
+                    <table>
+                        <tr>
+                            <td><span class="fa font-size-32" data-bind="text: isRight() ? '&#xf00c;' : '&#xf00d;'"></span></td>
+                            <td><span class="pre-wrap-text-base" data-bind="text: text"></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /ko -->
+                <!-- ko if: $root.current.question().type !== 1 && $root.current.question().type !== 2 -->
                 <div class="details-row">
                     <span class="pre-wrap-text" data-bind="text: answer.parseAnswer()"></span>
                 </div>
+                <!-- /ko -->
                 <div class="details-row float-buttons minh-40">
                     <button class="arcticmodal-close approve" data-bind="click: ">Закрыть</button>
                 </div>

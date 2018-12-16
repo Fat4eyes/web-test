@@ -31,6 +31,9 @@ $(document).ready(function(){
                     }),
                     rightPercentage: ko.observable()
                 }),
+                question: ko.observable({
+                    type: 0
+                }),
                 mark: {
                     isInput: ko.observable(false),
                     value: ko.validatedObservable('Оценить').extend({
@@ -124,9 +127,21 @@ $(document).ready(function(){
             };
 
             self.get = {
+                question: id => {
+                    $ajaxget({
+                        url: '/api/questions/' + id,
+                        errors: self.errors,
+                        successCallback: function(data){
+                            self.current.question({
+                                type: data.question.type(),
+                                answers: data.answers()
+                            });
+                        }
+                    });
+                },
                 result: function(){
                     var url = window.location.href;
-                    var id = +url.substr(url.lastIndexOf('/')+1);
+                    var id = + url.substr(url.lastIndexOf('/') + 1);
 
                     $ajaxget({
                         url: '/api/results/' + id,
@@ -205,6 +220,7 @@ $(document).ready(function(){
                 }
             };
 
+            self.current.answer().question.subscribe(q => self.get.question(q.id()));
             self.get.result();
             self.get.markScale();
 

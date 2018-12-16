@@ -93,7 +93,7 @@ button{
   cursor: pointer;
 }
 .inline{
-  display: inline-block;
+  display: inline-block !important;;
 }
 .block{
   display: block;
@@ -294,10 +294,14 @@ button{
 }
 
 
-.pre-wrap-text {
+.pre-wrap-text-base {
   white-space: pre-wrap;
   font-size: 13px;
   display: table;
+}
+
+.pre-wrap-text {
+  .pre-wrap-text-base;
   text-align: justify;
 }
 
@@ -957,7 +961,7 @@ button.add-section{
 
   .popup{
     &-delete{
-      height: 100px;
+      height: 80px;
       div:last-child{
         float: right;
         button:first-child{

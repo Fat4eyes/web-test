@@ -319,3 +319,18 @@ var handleArray = function (array, handler) {
     }
 };
 
+formatTimeToMinute = time =>`${formatTime(Math.floor(time / 60))}:${formatTime(time % 60)}`
+
+function safeTagsReplace(str) {
+    var tagsToReplace = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;'
+    };
+
+    function replaceTag(tag) {
+        return tagsToReplace[tag] || tag;
+    }
+
+    return str.replace(/[&<>]/g, replaceTag);
+}
