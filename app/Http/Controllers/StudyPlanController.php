@@ -109,7 +109,8 @@ class StudyPlanController extends Controller
 
             $disciplinePlan = new DisciplinePlan();
             $disciplinePlan->fillFromJson($planData);
-            $this->_studyPlanManager->createDisciplinePlan($disciplinePlan, $studyPlanId, $disciplineId);
+            $semester = $disciplinePlan->getSemester();
+            $this->_studyPlanManager->createDisciplinePlan($disciplinePlan, $studyPlanId, $disciplineId, $semester);
             return $this->successJSONResponse();
         } catch (Exception $exception){
             return $this->faultJSONResponse($exception->getMessage());
@@ -124,7 +125,8 @@ class StudyPlanController extends Controller
 
             $disciplinePlan = new DisciplinePlan();
             $disciplinePlan->fillFromJson($planData);
-            $this->_studyPlanManager->updateDisciplinePlan($disciplinePlan, $studyPlanId, $disciplineId);
+            $semester = $disciplinePlan->getSemester();
+            $this->_studyPlanManager->updateDisciplinePlan($disciplinePlan, $studyPlanId, $disciplineId, $semester);
             return $this->successJSONResponse();
         } catch (Exception $exception){
             return $this->faultJSONResponse($exception->getMessage());

@@ -45,12 +45,6 @@
             <input type="text" data-bind="value: $root.filter.name, valueUpdate: 'keyup'" placeholder="Название теста">
         </div>
         <div class="filter-block">
-            <span class="radio">Только активные: </span>
-            <span class="radio form-heights" data-bind="css: {'radio-important': $root.filter.isActive()}, click: () => $root.filter.isActive(true)">Да</span>
-            <span>|</span>
-            <span class="radio form-heights" data-bind="css: {'radio-important': !$root.filter.isActive()}, click: () => $root.filter.isActive(false)">Нет</span>
-        </div>
-        <div class="filter-block">
             <span class="clear" data-bind="click: $root.filter.clear">Очистить</span>
         </div>
     </div>
@@ -80,14 +74,6 @@
             <div class="details-column">
                 <label class="title">Время</label>
                 <span class="info" data-bind="text: minutes() + ':' + seconds()"></span>
-            </div>
-            <div class="details-column">
-                <label class="title">Общее время</label>
-                <span class="info" data-bind="text: totalTimeInSeconds"></span>
-            </div>
-            <div class="details-column">
-                <label class="title">Общее количество вопросов</label>
-                <span class="info" data-bind="text: questionsCount"></span>
             </div>
         </div>
         <div class="details-row float-buttons">
@@ -146,7 +132,7 @@
                  title="Пожалуйста, укажите хотя бы одну тему" validate special
                  data-bind="with: $root.multiselect">
                 <label class="title">Темы&nbsp;<span class="required">*</span></label>
-                    <multiselect params="{source: $root.multiselect.data, tags: $root.multiselect.tags}"></multiselect>
+                <multiselect params="{source: $root.multiselect.data, tags: $root.multiselect.tags}"></multiselect>
             </div>
         </div>
         <div class="details-row float-buttons">

@@ -19,7 +19,7 @@
             </div>
             <div class="layer-body" data-bind="if: current.question()">
                 <div class="question">
-                    <span data-bind="html: safeTagsReplace(current.question().text())"></span>
+                    <span data-bind="html: current.question().text"></span>
                 </div>
                 <div class="question-image" data-bind="if: current.question().image()">
                     <img class="pointer" data-bind="attr: {src: '/' + current.question().image()}, click: $root.actions.image.expand"/>
