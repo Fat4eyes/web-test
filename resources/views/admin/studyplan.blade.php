@@ -65,7 +65,7 @@
                     </thead>
 
 
-                    <tbody class="items-body" data-bind='foreach: $root.actions.sortedDiscipline().sort((a,b)=>a.disciplineId() > b.disciplineId())'>
+                    <tbody class="items-body" data-bind='foreach: $root.actions.sortedDiscipline()'>
                     <tr class="item" data-bind="click: $root.actions.show">
                         <td>
                             {{--<span class=info data-bind="textI discipline">--}}
@@ -344,10 +344,12 @@
 <script type="text/html" id="update-discipline">
     <td>
         <div class="wrapper-center">
-            <button class="cancel" data-bind="click: $root.actions.show">Отмена</button>
-            <div style="padding-top: 10px" >
+            <button class="btn-danger" data-bind="click: $root.actions.start.remove"><span class="fa-smaller">&#xf014;</span>
+            </button>
+            <button class="cancel" data-bind="click: $root.actions.show"><span class="fa-smaller">Отмена</span></button>
+            <div style="padding-top: 5px" >
                 <button id="bUpdateStudyplanItem" accept-validation title="Проверьте правильность заполнения полей"
-                        class="approve" data-bind="click: $root.actions.end.update">Сохранить
+                        class="approve" data-bind="click: $root.actions.end.update"><span class="fa-smaller">&nbsp;&nbsp;Сохранить&nbsp;&nbsp;</span>
                 </button>
             </div>
         </div>
@@ -463,9 +465,5 @@
               data-bind="click: $root.actions.switchHomeTest.on, css: {'radio-important' : hasHomeTest()}">Есть</span>
         <span class="radio"
               data-bind="click: $root.actions.switchHomeTest.off, css: {'radio-important' : !hasHomeTest()}">Нет</span>
-    </td>
-    <td style="background-color:#bf5329">
-        <button class="btn-danger" data-bind="click: $root.actions.start.remove"><span class="fa">&#xf014;</span>&nbsp;Удалить
-        </button>
     </td>
 </script>
