@@ -98,30 +98,30 @@
             <!-- /ko -->
             <!-- ko if: $root.common.activeTab() === 1 -->
             <div class="filter-block">
-                <button class="action-button width-100p"
+                <button class="action-button-pussy width-100p"
                         data-bind="click: $root.actions.transferAll">
                     Перевести всех студентов на следущий курс
                 </button>
             </div>
             <div class="filter-block">
-                <button class="action-button width-100p"
+                <button class="action-button-pussy width-100p"
                         data-bind="click: $root.actions.transfer, enable: $root.filter.group() && $root.buttonVisibility.transferStudents()">
                     Перевести выбранных студентов на следущий курс
                 </button>
             </div>
             <div class="filter-block">
-                <button class="action-button width-100p"
+                <button class="action-button-pussy width-100p"
                         data-bind="click: () => $root.common.transferStudentsIntoSubButton(true),
                                    enable: $root.filter.group() && $root.buttonVisibility.transferStudentsInto() && !$root.common.transferStudentsIntoSubButton(),
                                    visible: $root.common.transferStudentsIntoSubButton() === false">
                     Перевести выбранных студентов в новую группу
                 </button>
                 <!-- ko if: $root.common.transferStudentsIntoSubButton() -->
-                <button class="action-button width-49p fa"
+                <button class="action-button-pussy width-49p fa"
                         data-bind="click: $root.actions.transferAllIntoGroup, enable: $root.current.group() && $root.buttonVisibility.transferStudentsInto()">
                     &#xf00c;
                 </button>
-                <button class="action-button width-49p fa fl-r"
+                <button class="action-button-pussy width-49p fa fl-r"
                         data-bind="click: $root.actions.closeSubButton">
                     &#xf00d;
                 </button>
