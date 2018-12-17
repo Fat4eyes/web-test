@@ -45,12 +45,25 @@
                     <!-- /ko -->
                 </tbody>
             </table>
+            <!-- ko if: !$root.filter.showAll() -->
             @include('shared.pagination')
+            <!-- /ko -->
         </div>
         <div class="filter" data-bind="with: $root.filter">
             <div class="filter-block">
-                <button class="action-button width-100p" data-bind="click: $root.actions.up, enable: $root.filter.group() && $root.buttonVisibility.upStudents()">Перевести на новый курс</button>
+                <span class="radio form-heights"
+                      data-bind="css: {'radio-important': $root.common.activeTab() === 0},
+                                 click: () => $root.common.activeTab(0)">
+                    Фильтр
+                </span>
+                <span>|</span>
+                <span class="radio form-heights"
+                      data-bind="css: {'radio-important': $root.common.activeTab() === 1},
+                                 click: () => $root.common.activeTab(1)">
+                    Операции
+                </span>
             </div>
+            <!-- ko if: $root.common.activeTab() === 0 -->
             <div class="filter-block">
                 <label class="title">Студент</label>
                 <input type="text" data-bind="value: name, valueUpdate: 'keyup'" placeholder="ФИО студента"/>
@@ -72,8 +85,54 @@
                 <label class="block" for="non-active-students">Не подтвержденные</label>
             </div>
             <div class="filter-block">
+                <span class="radio">Отображать всех студентов в группе: </span>
+                <span class="radio form-heights" data-bind="css: {'radio-important': $root.filter.showAll()},
+                             click: () => $root.filter.showAll(true)">Да</span>
+                <span>|</span>
+                <span class="radio form-heights" data-bind="css: {'radio-important': !$root.filter.showAll()},
+                             click: () => $root.filter.showAll(false)">Нет</span>
+            </div>
+            <div class="filter-block">
                 <span class="clear" data-bind="click: clear">Очистить</span>
             </div>
+            <!-- /ko -->
+            <!-- ko if: $root.common.activeTab() === 1 -->
+            <div class="filter-block">
+                <button class="action-button width-100p"
+                        data-bind="click: $root.actions.transferAll">
+                    Перевести всех студентов на следущий курс
+                </button>
+            </div>
+            <div class="filter-block">
+                <button class="action-button width-100p"
+                        data-bind="click: $root.actions.transfer, enable: $root.filter.group() && $root.buttonVisibility.transferStudents()">
+                    Перевести выбранных студентов на следущий курс
+                </button>
+            </div>
+            <div class="filter-block">
+                <button class="action-button width-100p"
+                        data-bind="click: () => $root.common.transferStudentsIntoSubButton(true),
+                                   enable: $root.filter.group() && $root.buttonVisibility.transferStudentsInto() && !$root.common.transferStudentsIntoSubButton(),
+                                   visible: $root.common.transferStudentsIntoSubButton() === false">
+                    Перевести выбранных студентов в новую группу
+                </button>
+                <!-- ko if: $root.common.transferStudentsIntoSubButton() -->
+                <button class="action-button width-49p fa"
+                        data-bind="click: $root.actions.transferAllIntoGroup, enable: $root.current.group() && $root.buttonVisibility.transferStudentsInto()">
+                    &#xf00c;
+                </button>
+                <button class="action-button width-49p fa fl-r"
+                        data-bind="click: $root.actions.closeSubButton">
+                    &#xf00d;
+                </button>
+                <select class="mt-5"
+                        data-bind="options: $root.initial.groups().filter(g => g.id() !== $root.filter.group().id()),
+                                   optionsText: i => i.year() ? i.year() + ' ' + i.name() : i.name() ,
+                                   value: $root.current.group,
+                                   optionsCaption: 'Выберите группу'"></select>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
         </div>
     </div>
 @endsection

@@ -44,7 +44,8 @@ $(document).ready(function(){
                     required: true,
                     minLength: 6,
                     maxLength: 16
-                })
+                }),
+                group: ko.observable(null)
             };
 
             self.filter = {
@@ -63,7 +64,8 @@ $(document).ready(function(){
                             if (item.id() == id) self.filter.group(item);
                         });
                     }
-                }
+                },
+                showAll: ko.observable(false)
             };
             self.actions = {
                 show: function(data){
@@ -106,7 +108,6 @@ $(document).ready(function(){
                     self.alter.empty();
                     self.current.password(null);
                 },
-
                 password: {
                     change: function(){
                         commonHelper.modal.open('#change-password-modal');
@@ -142,7 +143,16 @@ $(document).ready(function(){
                         e.stopPropagation();
                     }
                 },
-                up: () => self.post.up()
+                transfer: () => self.post.transfer(),
+                transferAll: () => self.post.transferAll(),
+                closeSubButton: () => {
+                    self.common.transferStudentsIntoSubButton(false);
+                    self.current.group(null);
+                },
+                transferAllIntoGroup: () => {
+                    self.common.transferStudentsIntoSubButton(false);
+                    self.post.transferAllIntoGroup(self.current.group().id());
+                }
             };
 
             self.alter = {
@@ -199,7 +209,7 @@ $(document).ready(function(){
 
                     var url = '/api/user/show' +
                         '?page=' + self.pagination.currentPage() +
-                        '&pageSize=' + self.pagination.pageSize()
+                        '&pageSize=' + (self.filter.showAll() ? -1 : self.pagination.pageSize())
                         + name + group + active;
                     $ajaxget({
                         url: url,
@@ -291,7 +301,7 @@ $(document).ready(function(){
                         }
                     });
                 },
-                up: () => $.post(
+                transfer: () => $.post(
                     'students/transfer/next',
                     {
                         studentIds: self.current.students()
@@ -301,15 +311,39 @@ $(document).ready(function(){
                     .done(group => {
                         self.get.groups(group.id);
                     })
-                    .fail(({responseJSON}) => self.inform.show({message: responseJSON}))
+                    .fail(({responseJSON}) => self.inform.show({message: responseJSON})),
+                transferAll: () => $.post('students/transfer/next/all', {})
+                    .fail(({responseJSON}) => self.inform.show({message: responseJSON})),
+                transferAllIntoGroup: groupId => $.post(
+                    `students/transfer/group/${groupId}`,
+                    {
+                        studentIds: self.current.students()
+                        .filter(s => s.isSelect())
+                        .map(s => s.id())
+                    })
+                .done(group => {
+                    self.get.groups(groupId);
+                })
+                .fail(({responseJSON}) => self.inform.show({message: responseJSON})),
+
+            };
+
+            self.common = {
+                activeTab: ko.observable(0),
+                transferStudentsIntoSubButton: ko.observable(false)
             };
 
             self.buttonVisibility = {
-                upStudents: ko.computed(() =>
+                transferStudents: ko.computed(() =>
                     self.current.students().filter(s => s.isSelect()).length > 0 &&
                     self.filter.group() && self.filter.group().course() < 4
-                )
+                ),
+                transferStudentsInto: ko.computed(() =>
+                    self.current.students().filter(s => s.isSelect()).length > 0 &&
+                    self.filter.group()
+                ),
             };
+
 
             self.filter.group.subscribe(function(){
                 self.actions.cancel();
@@ -333,6 +367,14 @@ $(document).ready(function(){
                     ));
                 }
             });
+            self.filter.showAll.subscribe(function(){
+                if (!self.filter.group())
+                    return;
+
+                self.actions.cancel();
+                self.pagination.currentPage(1);
+                self.get.students();
+            });
             self.pagination.currentPage.subscribe(function(){
                 self.get.students();
             });
@@ -343,6 +385,7 @@ $(document).ready(function(){
 
             let model = returnStandart.call(self);
             model.buttonVisibility = self.buttonVisibility;
+            model.common = self.common;
 
             return model;
         };

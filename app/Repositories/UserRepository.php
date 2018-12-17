@@ -106,16 +106,23 @@ class UserRepository extends BaseRepository implements IUserRepository
         if (isset($isActive) && !empty($isActive)){
             $query = $query->andWhere("u.active = ".$isActive);
         }
-
+    
         $countQuery = clone $query;
-        $data =  $this->paginate($pageSize, $pageNum, $query, 'u.lastname');
-
+    
         $count = $countQuery->select(
             $countQuery->expr()
                 ->count('u.id'))
             ->getQuery()
             ->getSingleScalarResult();
+        
+        if ($pageSize == -1) {
 
+            $data =  $this->paginate($count, 1, $query, 'u.lastname');
+            
+            return new PaginationResult($data, $count);
+        }
+        
+        $data =  $this->paginate($pageSize, $pageNum, $query, 'u.lastname');
         return new PaginationResult($data, $count);
     }
 
