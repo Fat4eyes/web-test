@@ -117,16 +117,16 @@
                     Перевести выбранных студентов в новую группу
                 </button>
                 <!-- ko if: $root.common.transferStudentsIntoSubButton() -->
-                <button class="action-button-pussy width-49p fa"
+                <button class="action-button-pussy width-49p"
                         data-bind="click: $root.actions.transferAllIntoGroup, enable: $root.current.group() && $root.buttonVisibility.transferStudentsInto()">
-                    &#xf00c;
+                    <span class="fa">&#xf00c;</span> Перевести
                 </button>
-                <button class="action-button-pussy width-49p fa fl-r"
+                <button class="action-button-pussy width-49p fl-r"
                         data-bind="click: $root.actions.closeSubButton">
-                    &#xf00d;
+                    <span class="fa">&#xf00d;</span> Отмена
                 </button>
                 <select class="mt-5"
-                        data-bind="options: $root.initial.groups().filter(g => g.id() !== $root.filter.group().id()),
+                        data-bind="options: $root.current.groupsWithoutSelected,
                                    optionsText: i => i.year() ? i.year() + ' ' + i.name() : i.name() ,
                                    value: $root.current.group,
                                    optionsCaption: 'Выберите группу'"></select>

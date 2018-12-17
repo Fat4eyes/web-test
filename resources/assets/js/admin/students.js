@@ -12,6 +12,27 @@ $(document).ready(function(){
             self.initial = {
                 groups: ko.observableArray([])
             };
+
+            self.filter = {
+                name: ko.observable(''),
+                group: ko.observable(),
+                request: ko.observable(filters.active.all),
+                clear: function(){
+                    self.filter
+                    .name('')
+                    .group(null)
+                    .request(filters.active.all);
+                },
+                set: {
+                    group: function(id){
+                        $.each(self.initial.groups(), function(i, item){
+                            if (item.id() == id) self.filter.group(item);
+                        });
+                    }
+                },
+                showAll: ko.observable(false)
+            };
+
             self.current = {
                 isSelectAll: ko.observable(false),
                 students: ko.observableArray([]),
@@ -45,28 +66,13 @@ $(document).ready(function(){
                     minLength: 6,
                     maxLength: 16
                 }),
-                group: ko.observable(null)
+                group: ko.observable(null),
+                groupsWithoutSelected: ko.computed(() => self.filter.group()
+                    ? self.initial.groups().filter(g => g.id() !== self.filter.group().id())
+                    : self.initial.groups()
+                )
             };
 
-            self.filter = {
-                name: ko.observable(''),
-                group: ko.observable(),
-                request: ko.observable(filters.active.all),
-                clear: function(){
-                    self.filter
-                        .name('')
-                        .group(null)
-                        .request(filters.active.all);
-                },
-                set: {
-                    group: function(id){
-                        $.each(self.initial.groups(), function(i, item){
-                            if (item.id() == id) self.filter.group(item);
-                        });
-                    }
-                },
-                showAll: ko.observable(false)
-            };
             self.actions = {
                 show: function(data){
                     if (self.mode() === state.none || self.current.student().id() !== data.id()){
@@ -144,14 +150,17 @@ $(document).ready(function(){
                     }
                 },
                 transfer: () => self.post.transfer(),
-                transferAll: () => self.post.transferAll(),
+                transferAll: () => {
+                    self.post.transferAll();
+                    self.filter.group(null)
+                },
                 closeSubButton: () => {
                     self.common.transferStudentsIntoSubButton(false);
-                    self.current.group(null);
+                    self.current.group(null)
                 },
                 transferAllIntoGroup: () => {
                     self.common.transferStudentsIntoSubButton(false);
-                    self.post.transferAllIntoGroup(self.current.group().id());
+                    self.post.transferAllIntoGroup(self.current.group().id())
                 }
             };
 
@@ -321,11 +330,10 @@ $(document).ready(function(){
                         .filter(s => s.isSelect())
                         .map(s => s.id())
                     })
-                .done(group => {
+                .done(() => {
                     self.get.groups(groupId);
                 })
                 .fail(({responseJSON}) => self.inform.show({message: responseJSON})),
-
             };
 
             self.common = {

@@ -130,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <div class="details-column width-50p">
+        <div class="details-column width-50p fl-r">
             <div class="details-row">
                 <div class="details-column">
                     <label class="title">Форма обучения</label>
