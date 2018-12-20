@@ -21,8 +21,14 @@ class PerformanceManager
         $this->_unitOfWork = $unitOfWork;
     }
 
+    public function getDisciplineGroupByGroupId($groupId){
+            return $this->_unitOfWork->disciplineGroups()->getDisciplineGroupByGroupId($groupId);
+    }
+
     public function getStudentAttendancesByStudent($studentId){
-        return $this->_unitOfWork->studentAttendances()->find($studentId)->getStudentAttendancesByStudent($studentId);
+        return $this->_unitOfWork->studentAttendances()->getStudentAttendancesByStudent($studentId);
+
+//        return $this->_unitOfWork->studentAttendances()->find($studentId)->getStudentAttendancesByStudent($studentId);
     }
 
     public function getStudentProgressesByStudent($studentId){

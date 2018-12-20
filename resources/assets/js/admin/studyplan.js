@@ -102,8 +102,7 @@ $(document).ready(function () {
                     hasHomeTest: ko.observable(true),
                     hasAudienceTest: ko.observable(true),
                     discipline: ko.observable(''),
-                    disciplineId: ko.observable(0),
-
+                    disciplineId: ko.observable(0)
                 }),
                 planId: ko.observable()
             };
@@ -253,15 +252,19 @@ $(document).ready(function () {
                     }
                 },
                 sortedDiscipline : function () {
-                    let oldDisciplince = ko.mapping.toJS(self.current.disciplines());
+                    let oldDisciplines = ko.mapping.toJS(self.current.disciplines());
                     let disciplines = [];
-                    oldDisciplince.forEach(d => {
+                    oldDisciplines.forEach(d => {
                         if (disciplines.find(t => t.disciplineId === d.disciplineId))
                             d.disciplineVisible = false;
                         else d.disciplineVisible = true;
 
                         disciplines.push(d);
                     });
+                    console.log(disciplines);
+                    disciplines.forEach(d => {
+                        disciplines.sort((a,b)=>a.disciplineId > b.disciplineId);
+                    })
                     console.log(disciplines);
                     return ko.mapping.fromJS(disciplines);
                 },

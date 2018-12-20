@@ -22,4 +22,10 @@ class StudentAttendanceRepository extends BaseRepository
     public function getStudentAttendancesByStudent($studentId){
         return $this->repo->findBy(['student' => $studentId]);
     }
+
+//    public function getDisciplineGroupByGroupId($group) {
+//        return $this->repo->findBy([
+//            "group" => $group
+//        ]);
+//    }
 }

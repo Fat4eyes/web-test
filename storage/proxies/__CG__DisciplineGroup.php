@@ -64,10 +64,10 @@ class DisciplineGroup extends \DisciplineGroup implements \Doctrine\ORM\Proxy\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'name', 'abbreviation', 'description', 'group', 'studyplan', 'discipline'];
+            return ['__isInitialized__', 'id', 'group', 'studyplan', 'disciplinePlan'];
         }
 
-        return ['__isInitialized__', 'id', 'name', 'abbreviation', 'description', 'group', 'studyplan', 'discipline'];
+        return ['__isInitialized__', 'id', 'group', 'studyplan', 'disciplinePlan'];
     }
 
     /**
@@ -176,6 +176,17 @@ class DisciplineGroup extends \DisciplineGroup implements \Doctrine\ORM\Proxy\Pr
     /**
      * {@inheritDoc}
      */
+    public function getDisciplineGroupByGroupId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDisciplineGroupByGroupId', []);
+
+        return parent::getDisciplineGroupByGroupId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getGroup()
     {
 
@@ -223,7 +234,7 @@ class DisciplineGroup extends \DisciplineGroup implements \Doctrine\ORM\Proxy\Pr
     public function getDisciplinePlan()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDiscipline', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDisciplinePlan', []);
 
         return parent::getDisciplinePlan();
     }
@@ -231,12 +242,23 @@ class DisciplineGroup extends \DisciplineGroup implements \Doctrine\ORM\Proxy\Pr
     /**
      * {@inheritDoc}
      */
-    public function setDisciplinePlan($discipline)
+    public function setDisciplinePlan($disciplinePlan)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDiscipline', [$discipline]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDisciplinePlan', [$disciplinePlan]);
 
-        return parent::setDisciplinePlan($discipline);
+        return parent::setDisciplinePlan($disciplinePlan);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+
+        return parent::jsonSerialize();
     }
 
     /**

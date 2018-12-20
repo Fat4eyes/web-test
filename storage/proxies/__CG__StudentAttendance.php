@@ -64,10 +64,10 @@ class StudentAttendance extends \StudentAttendance implements \Doctrine\ORM\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'StudentAttendance' . "\0" . 'occupationType', '' . "\0" . 'StudentAttendance' . "\0" . 'occupationNumber', '' . "\0" . 'StudentAttendance' . "\0" . 'visitStatus', '' . "\0" . 'StudentAttendance' . "\0" . 'disciplineGroup', '' . "\0" . 'StudentAttendance' . "\0" . 'studentGroup', '' . "\0" . 'StudentAttendance' . "\0" . 'id', '' . "\0" . 'StudentAttendance' . "\0" . 'student', '' . "\0" . 'StudentAttendance' . "\0" . 'discipline_group'];
+            return ['__isInitialized__', 'occupationType', 'occupationNumber', 'visitStatus', 'disciplinePlan', 'id', 'student', 'discipline_plan'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'StudentAttendance' . "\0" . 'occupationType', '' . "\0" . 'StudentAttendance' . "\0" . 'occupationNumber', '' . "\0" . 'StudentAttendance' . "\0" . 'visitStatus', '' . "\0" . 'StudentAttendance' . "\0" . 'disciplineGroup', '' . "\0" . 'StudentAttendance' . "\0" . 'studentGroup', '' . "\0" . 'StudentAttendance' . "\0" . 'id', '' . "\0" . 'StudentAttendance' . "\0" . 'student', '' . "\0" . 'StudentAttendance' . "\0" . 'discipline_group'];
+        return ['__isInitialized__', 'occupationType', 'occupationNumber', 'visitStatus', 'disciplinePlan', 'id', 'student', 'discipline_plan'];
     }
 
     /**
@@ -176,6 +176,17 @@ class StudentAttendance extends \StudentAttendance implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
+    public function jsonSerialize()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+
+        return parent::jsonSerialize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getOccupationType()
     {
 
@@ -220,28 +231,6 @@ class StudentAttendance extends \StudentAttendance implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function isWasVisited()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isWasVisited', []);
-
-        return parent::isWasVisited();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setWasVisited($wasVisited)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setWasVisited', [$wasVisited]);
-
-        return parent::setWasVisited($wasVisited);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getStudent()
     {
 
@@ -264,23 +253,23 @@ class StudentAttendance extends \StudentAttendance implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function getDisciplineGroup()
+    public function getDisciplinePlan()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDisciplineGroup', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDisciplinePlan', []);
 
-        return parent::getDisciplineGroup();
+        return parent::getDisciplinePlan();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setDisciplineGroup($discipline_group)
+    public function setDisciplinePlan($discipline_plan)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDisciplineGroup', [$discipline_group]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDisciplinePlan', [$discipline_plan]);
 
-        return parent::setDisciplineGroup($discipline_group);
+        return parent::setDisciplinePlan($discipline_plan);
     }
 
     /**
@@ -296,6 +285,39 @@ class StudentAttendance extends \StudentAttendance implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isVisitStatus()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isVisitStatus', []);
+
+        return parent::isVisitStatus();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setVisitStatus($visitStatus)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVisitStatus', [$visitStatus]);
+
+        return parent::setVisitStatus($visitStatus);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fillFromJson($json)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'fillFromJson', [$json]);
+
+        return parent::fillFromJson($json);
     }
 
 }

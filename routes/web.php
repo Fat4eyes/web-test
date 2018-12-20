@@ -211,29 +211,28 @@ Route::group(['prefix' => 'api'], function() {
     Route::group(['prefix' => 'performance',
         'middleware' => 'checkRole:'.UserRole::Admin.'|'.UserRole::Lecturer],
         function () {
-//            Route::get('{id}', 'PerformanceController@getPlan');
-//            Route::get('group/{id}', 'PerformanceController@getPerformanceByGroupName');
-//            Route::get('{id}/disciplines', 'PerformanceController@getPlanDisciplines');
-//            Route::post('create', 'PerformanceController@create');
-//            Route::post('update', 'PerformanceController@update');
-//            Route::post('delete/{id}', 'PerformanceController@delete');
-            Route::get('show', 'PerformanceController@getPerformanceByGroupName');//getStudentsPerformanceByDisciplineAndGroup
+            Route::post('attendances', 'PerformanceController@getStudentAttendancesByStudentAndDisciplinePlanId');
+            Route::post('progresses', 'PerformanceController@getStudentProgressesByStudentAndDisciplinePlanId');
+            Route::get('{id}/attendances', 'PerformanceController@getStudentAttendancesByStudentAndDisciplinePlan');
+            Route::get('{id}/progresses', 'PerformanceController@getStudentProgressesByStudentAndDisciplinePlan');
+            Route::get('show', 'PerformanceController@getPerformanceByGroupName');
 
             /*------------------------------------------------------------------------
-            *                      Работа с дисциплинами планов                      */
+            *                      Работа с посещаемостью                     */
 
-            Route::group(['prefix' => 'discipline'], function () {
+
+            Route::group(['prefix' => 'attendance'], function () {
                 Route::get('{id}/marks', 'PerformanceController@getDisciplinePlanMarkTypes');
-                Route::post('show', 'PerformanceController@getPlansDisciplinesByStudyplanAndNamePaginated');
+                Route::get('{id}', 'PerformanceController@getDisciplineGroupByGroupId');
                 Route::post('create', 'PerformanceController@addDisciplinePlan');
                 Route::post('update', 'PerformanceController@updateDisciplinePlan');
                 Route::post('delete/{id}', 'PerformanceController@deleteDisciplinePlan');
             });
 
             /*------------------------------------------------------------------------
-            *                      Работа с оценками по дисциплинам планов           */
+            *                      Работа с оценками по дисциплинам            */
 
-            Route::group(['prefix' => 'mark'], function () {
+            Route::group(['prefix' => 'progress'], function () {
                 Route::post('create', 'PerformanceController@addDisciplinePlan');
                 Route::post('update', 'PerformanceController@updateDisciplinePlan');
                 Route::post('delete/{id}', 'PerformanceController@deleteDisciplinePlan');

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="discipline_group", indexes={@ORM\Index(name="discipline_group_group_id_foreign", columns={"group_id"}),{@ORM\Index(name="discipline_group_discipline_id_foreign", columns={"discipline_id"}), @ORM\Index(name="discipline_group_studyplan_id_foreign", columns={"studyplan_id"})})
  * @ORM\Entity
  */
-class DisciplineGroup extends BaseEntity
+class DisciplineGroup extends BaseEntity implements JsonSerializable
 {
     /**
      * @var integer
@@ -21,9 +21,6 @@ class DisciplineGroup extends BaseEntity
      */
     protected $id;
 
-    protected $name;
-    protected $abbreviation;
-    protected $description;
     /**
      * @var \Group
      *
@@ -33,6 +30,10 @@ class DisciplineGroup extends BaseEntity
      * })
      */
     protected $group;
+
+    public function getDisciplineGroupByGroupId(){
+        return;
+    }
 
     /**
      * @var \Studyplan
@@ -102,5 +103,14 @@ class DisciplineGroup extends BaseEntity
         $this->disciplinePlan = $disciplinePlan;
     }
 
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'group' => $this->group,
+            'studyplan' => $this->studyplan,
+            'disciplinePlan' => $this->disciplinePlan,
+        );
+    }
 }
 

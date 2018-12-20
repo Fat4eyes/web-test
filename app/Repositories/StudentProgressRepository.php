@@ -19,6 +19,23 @@ class StudentProgressRepository extends BaseRepository
         parent::__construct($em, StudentProgress::class);
     }
 
+    /**
+     * @param $id
+     * @return \Role
+     */
+    public function getStudentProgressesByUser($id)
+    {
+        $userRole = $this->repo->findOneBy(['user' => $id]);
+        if (isset($userRole)) {
+            $roleId = $userRole->getRole()->getId();
+
+            $roleQb = $this->em->getRepository(\Role::class)->createQueryBuilder('r');
+            $role = $roleQb->where('r.id =' . $roleId)->getQuery()->execute();
+            return (isset($role) && !empty($role)) ? $role[0] : null;
+        } else return null;
+    }
+
+
 //    function getByStudent($studentId){
 //        $query = $this->repo->createQueryBuilder('d');
 //
