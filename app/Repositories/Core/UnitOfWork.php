@@ -108,13 +108,6 @@ class UnitOfWork
         return $this->_studentAttendanceRepo;
     }
 
-    public function disciplineGroups(){
-        if ($this->_disciplineGroupRepo == null){
-            $this->_disciplineGroupRepo = new DisciplineGroupRepository($this->_em);
-        }
-        return $this->_disciplineGroupRepo;
-    }
-
     public function studentProgresses(){
         if ($this->_studentProgressRepo == null){
             $this->_studentProgressRepo = new StudentProgressRepository($this->_em);

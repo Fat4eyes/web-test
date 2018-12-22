@@ -19,20 +19,9 @@ class StudentProgressRepository extends BaseRepository
         parent::__construct($em, StudentProgress::class);
     }
 
-    /**
-     * @param $id
-     * @return \Role
-     */
-    public function getStudentProgressesByUser($id)
-    {
-        $userRole = $this->repo->findOneBy(['user' => $id]);
-        if (isset($userRole)) {
-            $roleId = $userRole->getRole()->getId();
 
-            $roleQb = $this->em->getRepository(\Role::class)->createQueryBuilder('r');
-            $role = $roleQb->where('r.id =' . $roleId)->getQuery()->execute();
-            return (isset($role) && !empty($role)) ? $role[0] : null;
-        } else return null;
+    public function getStudentProgressesByStudent($studentId, $disciplinPlanId){
+        return $this->repo->findBy(array('student' => $studentId, 'disciplinePlan' => $disciplinPlanId),array('occupationType' => 'ASC', 'workNumber' => 'ASC'));
     }
 
 
@@ -47,14 +36,20 @@ class StudentProgressRepository extends BaseRepository
 //        return $query->execute();
 //    }
 //
-    public function getStudentProgressesByStudent($studentId){//grouprepository
-        $query = $this->repo->createQueryBuilder('g')
-            ->join(\StudentProgress::class, 'sp', Join::WITH,
-                'g.studyplan = sp.id AND sp.student = '.$studentId)
-            ->getQuery();
 
-        return $query->execute();
-    }
+
+
+//    public function getStudentProgressesByStudent($studentId){//grouprepository
+//        $query = $this->repo->createQueryBuilder('g')
+//            ->join(\StudentProgress::class, 'sp', Join::WITH,
+//                'g.studyplan = sp.id AND sp.student = '.$studentId)
+//            ->getQuery();
+//
+//        return $query->execute();
+//    }
+
+
+
 
 //    public function getAttendancesByStudent($studentId){
 //        return $this->repo->findBy(['student' => $studentId]);

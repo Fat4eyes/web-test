@@ -45,11 +45,16 @@
                                         <span class="info-performance"
                                               data-bind="text: $root.current.student().studentInitials($data)"></span>
                                     </td>
-                                    <!-- ko foreach: $root.current.tableWidthLecture -->
+                                    <!-- ko foreach: $root.current.studentAttendances -->
+                                    <!-- ko if: $data.student.id == $parentContext.$data.id -->
+                                    <!-- ko if: $data.occupationType === "lecture" -->
+                                    <span data-bind="$data.student"></span>
                                     <td rel="toggle" class="state0"
                                         data-bind="attr: {'id': 'toggleLecture'+$parentContext.$index()+'_'+$index()},
                                                  click: function () {$root.current.showToggleLecture($index(),$parentContext.$index())}">
                                     </td>
+                                    <!-- /ko -->
+                                    <!-- /ko -->
                                     <!-- /ko -->
                                 </tr>
                                 </tbody>
@@ -77,11 +82,15 @@
                                         <span class="info-performance"
                                               data-bind="text: $root.current.student().studentInitials($data)"></span>
                                     </td>
-                                    <!-- ko foreach: $root.current.tableWidthPractical -->
+                                    <!-- ko foreach: $root.current.studentAttendances -->
+                                    <!-- ko if: $data.student.id == $parentContext.$data.id -->
+                                    <!-- ko if: $data.occupationType === "practical" -->
                                     <td rel="toggle" class="state0"
                                         data-bind="attr: {'id': 'togglePractical'+$parentContext.$index()+'_'+$index()},
                                                  click: function () {$root.current.showTogglePractical($index(),$parentContext.$index())}">
                                     </td>
+                                    <!-- /ko -->
+                                    <!-- /ko -->
                                     <!-- /ko -->
                                 </tr>
                                 </tbody>
@@ -93,36 +102,45 @@
                             <table>
                                 <thead class="items-body">
 
-                                <tr data-bind='foreach: $root.current.tableWidthLaboratory'>
+                                <tr>
+                                    <th>
+                                        <span class="info">СТУДЕНТ</span>
+                                    </th>
+                                    <!-- ko foreach: $root.current.tableWidthLaboratory -->
                                     <th>
                                         <span class="info" data-bind="text: $data"></span>
                                     </th>
+                                    <!-- /ko -->
                                 </tr>
                                 </thead>
 
-
                                 <tbody class="items-body" data-bind='foreach: $root.current.students'>
                                 <tr>
-                                    <td>
-                                        {{--<span class=info data-bind="textI discipline">--}}
-                                        <span class="info" data-bind="text: name"></span>
-
-                                        {{--<span class="info" data-bind="text: firstName">.</span>--}}
-                                        {{--<span class="info" data-bind="text: patronymic">.</span>--}}
+                                    <td style="padding-bottom: 6px; padding-top: 6px;">
+                                        <span class="info-performance"
+                                              data-bind="text: $root.current.student().studentInitials($data)"></span>
                                     </td>
-                                    <td><input type="text" value="21" class="filter-input"></td>
-                                    {{--<td>--}}
-                                    {{--<span class=info data-bind="textI discipline">--}}
-                                    {{--<span class="info" data-bind="text: lastName">.</span>--}}
-                                    {{--</td>--}}
-                                    <td>
-                                        <input data-bind="textInput: firstName" class="filter-input"></input>
+                                    <!-- ko foreach: $root.current.studentProgresses -->
+                                    <!-- ko if: $data.student.id == $parentContext.$data.id -->
+                                    <td rel="input">
+                                        <input data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index()},
+                                               click: function () {$root.current.showToggleLaboratory($index(),$parentContext.$index())}"
+                                               class="filter-input">
                                     </td>
-                                    <td><input type="text" value="21" class="filter-input"></td>
+                                    <!-- /ko -->
+                                    <!-- /ko -->
                                 </tr>
                                 </tbody>
                             </table>
                         </section>
+                        {{--<div class="details-row float-buttons">--}}
+                            {{--<div class="details-column float-right width-100p">--}}
+                                {{--<button class="cancel" data-bind="click: $root.actions.cancel">Отмена</button>--}}
+                                {{--<button id="bUpdateStudyplanItem" accept-validation title="Проверьте правильность заполнения полей"--}}
+                                        {{--class="approve" data-bind="click: $root.actions.end.update">Сохранить--}}
+                                {{--</button>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </div>
                 </div>
 

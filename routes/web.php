@@ -215,7 +215,9 @@ Route::group(['prefix' => 'api'], function() {
             Route::post('progresses', 'PerformanceController@getStudentProgressesByStudentAndDisciplinePlanId');
             Route::get('{id}/attendances', 'PerformanceController@getStudentAttendancesByStudentAndDisciplinePlan');
             Route::get('{id}/progresses', 'PerformanceController@getStudentProgressesByStudentAndDisciplinePlan');
-            Route::get('show', 'PerformanceController@getPerformanceByGroupName');
+            Route::post('show', 'PerformanceController@getStudentPerformancesByStudentAndDisciplinePlan');
+            Route::post('create', 'PerformanceController@createStudentPerformances');
+            Route::post('update', 'PerformanceController@updateStudentPerformances');
 
             /*------------------------------------------------------------------------
             *                      Работа с посещаемостью                     */

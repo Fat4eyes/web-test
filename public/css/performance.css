@@ -23,6 +23,13 @@ th {
     text-align: center;
 }
 
+.filter-input {
+    border: solid #FFF;
+    max-width: 50px;
+    max-height: 20px;
+    text-align: center;
+}
+
 .petails {
     margin-top: -2px;
     height: auto;
@@ -69,6 +76,7 @@ th {
     padding-right: 15px;
     padding-left: 15px;
 }
+
 
 .performance-wrapper {
     background-color: #FFFFFF;

@@ -6,7 +6,6 @@ $(document).ready(function () {
 
             initializeViewModel.call(self, {
                 page: menu.admin.performance,
-                pagination: 20,
                 mode: true
             });
 
@@ -38,12 +37,26 @@ $(document).ready(function () {
                         maxLength: 80
                     }),
                     studentInitials: function (data) {
-                        console.log(data);
-
-                        return data.lastName() + " " + data.firstName().charAt(0) + "." + data.patronymic().charAt(0) + ".";
+                        return data.lastName + " " + data.firstName.toString().charAt(0) + "." + data.patronymic.toString().charAt(0) + ".";
                     },
-                    studentAttendances: ko.observableArray([]),
-                    studentProgresses: ko.observableArray([]),
+                }),
+                studentAttendances: ko.observableArray([]),
+                studentProgresses: ko.observableArray([]),
+                studentAttendance: ko.observable({
+                    id: ko.observable(''),
+                    occupationNumber: ko.observable('0'),
+                    occupationType: ko.observable('lecture'),
+                    visitStatus: ko.observable('0'),
+                    student: ko.observable(''),
+                    disciplinePlan: ko.observable(''),
+                }),
+                studentProgress: ko.observable({
+                    id: ko.observable(''),
+                    workNumber: ko.observable(''),
+                    occupationType: ko.observable(''),
+                    workMark: ko.observable(''),
+                    student: ko.observable(''),
+                    disciplinePlan: ko.observable(''),
                 }),
                 planId: ko.observable(),
                 showToggleLecture: function (index, parentIndex) {
@@ -52,6 +65,7 @@ $(document).ready(function () {
                     if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
                         state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
                     }
+                    console.log(this.students()[parentIndex]);
                     document.getElementById(id).className = state;
                 },
                 showTogglePractical: function (index, parentIndex) {
@@ -60,10 +74,55 @@ $(document).ready(function () {
                     if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
                         state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
                     }
+                    console.log(this.students()[parentIndex]);
                     document.getElementById(id).className = state;
                 },
                 showToggleLaboratory: function (student) {
                     return;
+                },
+                // attendancesByStudent: ko.computed(function () {
+                //     var result = [],
+                //         currentLetter, currentGroup;
+                //     ko.utils.arrayForEach(self.contacts(), function (contact) {
+                //         if (contact.name[0] !== currentLetter) {
+                //             currentLetter = contact.name[0];
+                //             currentGroup = {
+                //                 letter: currentLetter,
+                //                 contacts: []
+                //             };
+                //             result.push(currentGroup);
+                //         }
+                //         currentGroup.contacts.push(contact);
+                //     });
+                //     return result;
+                // })
+            }
+            ;
+            self.alter = {
+                stringify: function () {
+                    var students = ko.mapping.toJS(self.current.students());
+                    var studentAttendances = ko.mapping.toJS(self.current.studentAttendances());
+                    var studentProgresses = ko.mapping.toJS(self.current.studentProgresses());
+                    // console.log(self.filter.group().id());
+                    // console.log(self.filter.semester().id);
+                    // if (self.mode() === state.create) delete discipline.id;
+                    return JSON.stringify({
+                        groupId: self.filter.group().id(),
+                        disciplinePlan: self.filter.semester().id,
+                        students: students,
+                        studentAttendances: studentAttendances,
+                        studentProgresses: studentProgresses,
+                    });
+                },
+                fill: function (d) {
+                    ko.mapping.fromJS(d, {}, self.current.students());
+
+                    // self.current.discipline().id(d.id()).semester(d.semester())
+                    //     .hoursAll(d.hoursAll()).hoursLecture(d.hoursLecture())
+                },
+                empty: function () {
+                    self.current.discipline().id(0).semester('')
+                        .hoursAll('').hoursLecture('').hoursLaboratory('')
                 }
             };
             self.filter = {
@@ -148,31 +207,6 @@ $(document).ready(function () {
                 }
             };
 
-            // self.alter = {
-            //     stringify: {
-            //         student: function () {
-            //             var student = ko.mapping.toJS(self.current.student);
-            //             delete student.group;
-            //
-            //             self.mode() === state.create
-            //                 ? delete student.id
-            //                 : delete student.password;
-            //
-            //             return JSON.stringify({
-            //                 student: student,
-            //                 groupId: self.current.student().group().id()
-            //             });
-            //         },
-            //     },
-            //     fill: function (data) {
-            //         self.current.student().id(data.id())
-            //             .firstname(data.firstname()).lastname(data.lastname())
-            //             .patronymic(data.patronymic());
-            //         ko.mapping.fromJS(data, {}, self.filter.group);
-            //     },
-            // };
-
-
             self.get = {
                 settings: function () {
                     var json = JSON.stringify({
@@ -218,7 +252,6 @@ $(document).ready(function () {
                     });
                 },
                 disciplines: function () {
-                    //console.log(self.filter.group().studyplanId());
                     if (self.filter.group()) {
                         let url = '/api/plan/discipline/show' +
                             '?studyplan=' + self.filter.group().studyplanId();
@@ -234,71 +267,94 @@ $(document).ready(function () {
                                 self.settings() ? self.filter.set.discipline() : null;
                             }
                         });
-
-                        // todo было
-                        // $ajaxget({
-                        //     url: '/api/profile/'+ self.filter.profile().id() +'/disciplines',
-                        //     errors: self.errors,
-                        //     data: null,
-                        //     successCallback: function(data){
-                        //         self.filter.disciplines(data());
-                        //         self.settings() ? self.filter.set.discipline() : null;
-                        //     }
-                        // });
-
                     }
                 },
 
-
-                studyplan: function () {
-
-                    // let url = '/api/performance/group/1';
-                    //
-                    // let requestOptions = {
-                    //     url: url,
-                    //     errors: self.errors,
-                    //     successCallback: function (data) {
-                    //         self.filter.disciplines(data());
-                    //     }
-                    // };
-                    // $ajaxpost(requestOptions);
-
-                    $ajaxget({
-                        url: '/api/performance/2/attendances',
-                        errors: self.errors,
-                        successCallback: function (data) {
-                            self.current.student().studentAttendances(data());
-                            console.log(self.current.student().studentAttendances());
-                        }
-                    });
-
-                    var url = '/api/plan/discipline/show' +
-                        '?discipline=' + self.current.discipline().id() + '&student=2';
+                performances: function () {
+                    var url = '/api/performance/show' +
+                        '?discipline=' + self.filter.discipline().disciplineId + '&group=' + self.filter.group().id();
 
                     var requestOptions = {
                         url: url,
                         errors: self.errors,
                         data: null,
                         successCallback: function (data) {
-                            self.filter.disciplines(data.data());
+                            let oldStudents = ko.mapping.toJS(data());
+                            let students = [];
+                            studentProgress = self.current.studentProgress();
+
+                            self.get.empty();
+                            console.log(oldStudents);
+                            count = 0;
+                            oldStudents.forEach(d => {
+                                students.push(d.student);
+                                if (d.studentAttendances.length < 0) {
+                                    self.current.studentProgresses.push(d.studentProgresses);
+                                }
+                                else {
+                                    console.log(self.filter.semester().countLecture);
+                                    for (let i = 1; i < self.filter.semester().countLecture+1; i++) {
+                                        let studentAttendance = ko.toJS(self.current.studentAttendance);
+                                        studentAttendance.id = i;
+                                        studentAttendance.student = d.student;
+                                        studentAttendance.disciplinePlan = self.filter.semester;
+                                        studentAttendance.occupationType = 'lecture';
+                                        studentAttendance.occupationNumber = i;
+                                        studentAttendance.visitStatus = 0;
+                                        self.current.studentAttendances.push(studentAttendance);
+                                    }
+
+                                    for (let i = 1; i < self.filter.semester().countPractical+1; i++) {
+                                        let studentAttendance = ko.toJS(self.current.studentAttendance);
+                                        studentAttendance.id = self.filter.semester().countLecture + i +1;
+                                        studentAttendance.student = d.student;
+                                        studentAttendance.disciplinePlan = self.filter.semester;
+                                        studentAttendance.occupationType = 'practical';
+                                        studentAttendance.occupationNumber = i;
+                                        studentAttendance.visitStatus = 0;
+                                        self.current.studentAttendances.push(studentAttendance);
+                                    }
+
+                                    for (let i = 1; i < self.filter.semester().countLaboratory+1; i++) {
+                                        let studentProgress = ko.toJS(self.current.studentProgress);
+                                        studentProgress.id = i;
+                                        studentProgress.student = d.student;
+                                        studentProgress.disciplinePlan = self.filter.semester;
+                                        studentProgress.occupationType = 'mark';
+                                        studentProgress.workNumber = i;
+                                        studentProgress.workMark = "";
+                                        self.current.studentProgresses.push(studentProgress);
+                                    }
+
+                                    console.log(self.current.studentAttendances());
+                                    console.log(self.current.studentProgresses());
+                                }
+                            });
+                            self.current.students(students);
+
+                            self.post.performances();
                         }
                     };
                     $ajaxpost(requestOptions);
+                },
 
-                    //
-                    // var name = self.filter.discipline() ? '&name=' + self.filter.groupId() : '';
-                    // var url = '/api/plan/discipline/show' +
-                    //     '?studyplan=' + self.current.planId() + name;
-                    //
-                    // var requestOptions = {
-                    //     url: url,
-                    //     errors: self.errors,
-                    //     data: null,
-                    //     successCallback: function (data) {
-                    //         self.filter.disciplines(data.data());
-                    //     }
-                    // };
-                    // $ajaxpost(requestOptions);
+                attendance: function () {
+                    self.current.students().forEach(d => {
+                        var url = '/api/performance/attendances' +
+                            '?discipline=' + self.filter.discipline().disciplineId + '&student=' + d.id();
+
+                        var requestOptions = {
+                            url: url,
+                            errors: self.errors,
+                            data: null,
+                            successCallback: function (data) {
+                              //  self.current.student().studentAttendances(data());
+
+                                // console.log(self.current.student().studentAttendances());
+                            }
+                        };
+                        $ajaxpost(requestOptions);
+                    });
                 },
                 semesters: function () {
                     if (self.filter.discipline) {
@@ -306,83 +362,57 @@ $(document).ready(function () {
                         self.settings() ? self.filter.set.semester() : null;
                     }
                 },
+                empty: function () {
+                    self.current.studentAttendances([]);
+                    self.current.studentProgresses([]);
+                },
                 results: function () {
                     var group = self.filter.group();
                     var discipline = self.filter.discipline;
                     var semester = self.filter.semester();
 
-                    // if(group){
-                    //     console.log(self.filter.group().studyplanId());
-                    // }
-
-                    console.log(semester);
-
                     if (!semester) {
-                        self.current.tableWidthLecture([]);
+                        self.get.empty();
                         self.get.semesters();
                         return;
                     }
 
                     if (!discipline) {
-                        self.current.tableWidthLecture([]);
+                        self.get.empty();
                         self.get.disciplines();
                         return;
                     }
 
                     if (!group) {
-                        self.current.tableWidthLecture([]);
+                        self.get.empty();
                         self.get.groups();
-                        group = {
-                            id: function () {
-                                return 0;
-                            }
-                        }
+                        return;
                     }
 
+                    self.current.tableWidthLecture([]);
+                    self.current.tableWidthPractical([]);
+                    self.current.tableWidthLaboratory([]);
                     // self.filter.discipline = self.filter.discipline();
 
                     let ret = [];
-                    for (let i = 1; i < semester.countLecture; i++)
+                    for (let i = 1; i < semester.countLecture+1; i++)
                         ret.push('ЛЕК ' + i);
                     self.current.tableWidthLecture(ret);
 
                     console.log(self.filter.semester());
-                    console.log(self.current.tableWidthLecture().length);
 
                     let ret2 = [];
-                    for (let i = 1; i < semester.countPractical; i++)
+                    for (let i = 1; i < semester.countPractical+1; i++)
                         ret2.push('ПРЗ ' + i);
                     self.current.tableWidthPractical(ret2);
 
                     let ret3 = [];
-                    for (let i = 1; i < semester.countLaboratory; i++)
+                    for (let i = 1; i < semester.countLaboratory+1; i++)
                         ret3.push('ЛАБ ' + i);
                     self.current.tableWidthLaboratory(ret3);
 
-                    self.get.studyplan();
-
-                    // let students = ko.mapping.toJS(self.current.students());
-
-                    $ajaxget({
-                        //    Route::get('{id}/students', 'GroupController@getGroupStudents');
-                        url: '/api/groups/' + group.id()
-                        + '/students',
-                        errors: self.errors,
-                        successCallback: function (data) {
-                            self.current.students(data());
-                        }
-                    });
-
+                    self.get.performances();
                 },
-                // markScale: function(){
-                //     $ajaxget({
-                //         url: '/api/settings/get/maxMarkValue',
-                //         errors: self.errors,
-                //         successCallback: function(data){
-                //             self.current.markScale(data.value());
-                //         }
-                //     });
-                // }todo поменять со студентами
             };
             self.post = {
                 settings: function (settings) {
@@ -391,7 +421,40 @@ $(document).ready(function () {
                         errors: self.errors,
                         data: JSON.stringify({settings: settings})
                     });
-                }
+                },
+                performances: function () {
+                    // var url = '/api/performance/show' +
+                    //     '?discipline=' + self.filter.discipline().disciplineId + '&group=' + self.filter.group().id();
+                    self.mode(state.create);
+                    y = self.alter.stringify();
+                    console.log(y);
+
+                    // var requestOptions = {
+                    //     url: self.mode() === state.create ? '/api/performance/create' : '/api/performance/update',
+                    //     errors: self.errors,
+                    //     data: self.alter.stringify(),
+                    //     successCallback: function (data) {
+                    //         self.mode(state.none);
+                    //         // self.alter.empty();
+                    //         // self.initial.selection(null);
+                    //        // self.get.disciplines();
+                    //
+                    //         let oldStudents = ko.mapping.toJS(data());
+                    //         let students = [];
+                    //
+                    //         console.log(oldStudents);
+                    //         oldStudents.forEach(d => {
+                    //             students.push(d.student);
+                    //             self.current.studentAttendances.push(d.studentAttendances);
+                    //             self.current.studentProgresses.push(d.studentProgresses);
+                    //         });
+                    //
+                    //         console.log(self.current.studentAttendances()[0]);
+                    //         self.current.students(students);
+                    //     }
+                    // };
+                    // $ajaxpost(requestOptions);
+                },
             };
 
             self.get.settings();
@@ -403,33 +466,35 @@ $(document).ready(function () {
                     self.post.settings({'result_profile': self.filter.profile().id()});
                     self.get.groups();
                     self.get.disciplines();
+                    // self.get.empty();
                     return;
                 }
                 self.filter
                     .groups([]);
                 self.post.settings({'result_profile': null});
+                // self.get.empty();
             });
             self.filter.group.subscribe(function (value) {
                 if (value) {
                     self.post.settings({'result_group': self.filter.group().id()});
+                    self.get.empty();
                     self.get.disciplines();
                     self.get.semesters();
-                    self.get.results();
+                    // self.get.results();
                     return;
                 }
+                self.get.empty();
                 self.filter.uniqueDisciplines([]);
                 self.post.settings({'result_group': null});
-                //self.get.results();
+                // self.get.results();
             });
             self.filter.discipline.subscribe(function (value) {
                 if (value) {
                     self.post.settings({'result_discipline': self.filter.discipline().id});
-                    // self.filter.discipline = value;
+                    self.get.empty();
                     console.log(self.filter.discipline());
                     self.get.semesters();
-                    // self.filter.disciplineSemesters();
-
-                    self.get.results();
+                    // self.get.results();
                     return;
                 }
                 self.filter.semesters([]);
@@ -438,13 +503,14 @@ $(document).ready(function () {
             self.filter.semester.subscribe(function (value) {
                 if (value) {
                     self.post.settings({'result_semester': self.filter.semester().id});
-                    // self.get.groups();
                     self.get.results();
                     return;
                 }
-                // self.filter.semesters([]);
+                self.get.empty();
                 self.post.settings({'result_semester': null});
-                self.get.results();
+                self.current.tableWidthLecture([]);
+                self.current.tableWidthPractical([]);
+                self.current.tableWidthLaboratory([]);
             });
             return returnStandart.call(self);
         };

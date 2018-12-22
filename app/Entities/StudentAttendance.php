@@ -22,6 +22,10 @@ class StudentAttendance extends BaseEntity implements JsonSerializable
      */
     protected $visitStatus;
 
+    /**
+     * @var \DisciplinePlan
+     */
+
     protected $disciplinePlan;
 
     /**
@@ -33,11 +37,6 @@ class StudentAttendance extends BaseEntity implements JsonSerializable
      * @var \User
      */
     protected $student;
-
-    /**
-     * @var \DisciplinePlan
-     */
-    protected $discipline_plan;
 
     public function jsonSerialize()
     {
@@ -105,15 +104,15 @@ class StudentAttendance extends BaseEntity implements JsonSerializable
      */
     public function getDisciplinePlan()
     {
-        return $this->discipline_plan;
+        return $this->disciplinePlan;
     }
 
     /**
-     * @param DisciplinePlan $discipline_plan
+     * @param DisciplinePlan $disciplinePlan
      */
-    public function setDisciplinePlan($discipline_plan)
+    public function setDisciplinePlan($disciplinePlan)
     {
-        $this->discipline_plan = $discipline_plan;
+        $this->disciplinePlan = $disciplinePlan;
     }
 
     /**
