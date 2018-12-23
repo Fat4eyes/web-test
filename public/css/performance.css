@@ -216,10 +216,10 @@ th {
     content: "\f0c0";
 }
 .tabs>label[for*="2"]:before {
-    content: "\f0c5";
+    content: "\f108";
 }
 .tabs>label[for*="3"]:before {
-    content: "\f108";
+    content: "\f0c5";
 }
 
 /* Изменения стиля переключателей вкладок при наведении */

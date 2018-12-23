@@ -54,25 +54,25 @@ $(document).ready(function () {
                     }),
                     hoursLecture: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
                     hoursLaboratory: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
                     hoursPractical: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
                     hoursSolo: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
