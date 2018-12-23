@@ -29,8 +29,6 @@ class PerformanceManager
     public function getStudentAttendancesByStudent($studentId, $disciplineId)
     {
         return $this->_unitOfWork->studentAttendances()->getStudentAttendancesByStudent($studentId, $disciplineId);
-
-//        return $this->_unitOfWork->studentAttendances()->find($studentId)->getStudentAttendancesByStudent($studentId);
     }
 
     public function getStudentProgressesByStudent($studentId, $disciplineId)
@@ -52,14 +50,14 @@ class PerformanceManager
     {
         $students = $this->_unitOfWork->users()->getGroupStudents($groupId);
         $studentsInfo = [];
-        $studentsPerformanceCount = 0;
         foreach ($students as $student) {
-            $studentAttendances = $this->_unitOfWork->studentAttendances()->getStudentAttendancesByStudent($student->getId(), $disciplineId);
-            $studentProgresses = $this->_unitOfWork->studentProgresses()->getStudentProgressesByStudent($student->getId(), $disciplineId);
+            $studentAttendances = $this->_unitOfWork->studentAttendances()->
+            getStudentAttendancesByStudent($student->getId(), $disciplineId);
+            $studentProgresses = $this->_unitOfWork->studentProgresses()->
+            getStudentProgressesByStudent($student->getId(), $disciplineId);
 
-            if(count($studentProgresses) != 0 && count($studentProgresses) != 0)
-                  $studentsPerformanceCount++;
-            $studentInfo = new StudentPerformanceInfoViewModel($student);
+            $studentInfo = new StudentPerformanceInfoViewModel();
+            $studentInfo->setStudent($student);
             $studentInfo->setStudentAttendances($studentAttendances);
             $studentInfo->setStudentProgresses($studentProgresses);
 
@@ -69,63 +67,66 @@ class PerformanceManager
         return $studentsInfo;
     }
 
-    //проверка есть ли посещаемость студента в БД
-    public function createStudentsPerformance(\StudentAttendance $studentAttendance, \StudentProgress $studentProgress, $studentId, $disciplinePlanId)
+    public function createStudentPerformances($studentPerformances, $disciplinePlanId)
     {
-        $student = $this->_unitOfWork->users()->find($studentId);
-        $disciplinePlan = $this->_unitOfWork->disciplinePlans()->find($disciplinePlanId);
-
-        $studentAttendance->setStudent($student);
-        $studentAttendance->setDisciplinePlan($disciplinePlan);
-        $studentProgress->setStudent($student);
-        $studentProgress->setDisciplinePlan($disciplinePlan);
-
-        $this->_unitOfWork->studentAttendances()->create($studentAttendance);
-        $this->_unitOfWork->studentProgresses()->create($studentProgress);
-
-        $this->_unitOfWork->commit();
-    }
-
-
-    public function createStudentAttendances($studentAttendances, $disciplinePlanId)
-    {
-        foreach ($studentAttendances as $currentAttendance) {
-            $studentAttendance = new StudentAttendance();
-            $studentAttendance->fillFromJson($currentAttendance);
-
+        $disciplinePlan = $this->_unitOfWork->disciplinePlans()
+            ->find($disciplinePlanId);
+        foreach ($studentPerformances as $currentPerformance) {
+            $studentInfo = new StudentPerformanceInfoViewModel();
+            $studentInfo->fillFromJson($currentPerformance);
             $student = new User();
-            $student->fillFromJson($studentAttendance->getStudent());
-            $disciplinePlan = $this->_unitOfWork->disciplinePlans()
-                ->find($disciplinePlanId);
+            $student->fillFromJson($studentInfo->getStudent());
             $student = $this->_unitOfWork->Users()
                 ->find($student->getId());
 
-            $studentAttendance->setStudent($student);
-            $studentAttendance->setDisciplinePlan($disciplinePlan);
-
-            $this->_unitOfWork->studentAttendances()->create($studentAttendance);
-            $this->_unitOfWork->commit();
+            foreach ($studentInfo->getStudentAttendances() as $attendance) {
+                $studentAttendance = new StudentAttendance();
+                $studentAttendance->fillFromJson($attendance);
+                $studentAttendance->setStudent($student);
+                $studentAttendance->setDisciplinePlan($disciplinePlan);
+                $this->_unitOfWork->studentProgresses()->create($studentAttendance);
+                $this->_unitOfWork->commit();
+            }
+            foreach ($studentInfo->getStudentProgresses() as $progress) {
+                $studentProgress = new StudentProgress();
+                $studentProgress->fillFromJson($progress);
+                $studentProgress->setStudent($student);
+                $studentProgress->setDisciplinePlan($disciplinePlan);
+                $this->_unitOfWork->studentProgresses()->create($studentProgress);
+                $this->_unitOfWork->commit();
+            }
         }
     }
 
-    public function createStudentProgresses($studentProgresses, $disciplinePlanId)
+    public function updateStudentPerformances($studentPerformances, $disciplinePlanId)
     {
-        foreach ($studentProgresses as $currentProgress) {
-            $studentProgress = new StudentAttendance();
-            $studentProgress->fillFromJson($currentProgress);
 
+        $disciplinePlan = $this->_unitOfWork->disciplinePlans()
+            ->find($disciplinePlanId);
+        foreach ($studentPerformances as $currentPerformance) {
+            $studentInfo = new StudentPerformanceInfoViewModel();
+            $studentInfo->fillFromJson($currentPerformance);
             $student = new User();
-            $student->fillFromJson($studentProgress->getStudent());
-            $disciplinePlan = $this->_unitOfWork->disciplinePlans()
-                ->find($disciplinePlanId);
+            $student->fillFromJson($studentInfo->getStudent());
             $student = $this->_unitOfWork->Users()
                 ->find($student->getId());
 
-            $studentProgress->setStudent($student);
-            $studentProgress->setDisciplinePlan($disciplinePlan);
-
-            $this->_unitOfWork->studentProgresses()->create($studentProgress);
-            $this->_unitOfWork->commit();
+            foreach ($studentInfo->getStudentAttendances() as $attendance) {
+                $studentAttendance = new StudentAttendance();
+                $studentAttendance->fillFromJson($attendance);
+                $studentAttendance->setStudent($student);
+                $studentAttendance->setDisciplinePlan($disciplinePlan);
+                $this->_unitOfWork->studentProgresses()->update($studentAttendance);
+                $this->_unitOfWork->commit();
+            }
+            foreach ($studentInfo->getStudentProgresses() as $progress) {
+                $studentProgress = new StudentProgress();
+                $studentProgress->fillFromJson($progress);
+                $studentProgress->setStudent($student);
+                $studentProgress->setDisciplinePlan($disciplinePlan);
+                $this->_unitOfWork->studentProgresses()->update($studentProgress);
+                $this->_unitOfWork->commit();
+            }
         }
     }
 
@@ -153,35 +154,6 @@ class PerformanceManager
         $this->_unitOfWork->commit();
     }
 
-    public function updateStudentsAttendances(Array $studentPerformanceInfos)
-    {
-
-
-        foreach ($studentPerformanceInfos as $studentInfo) {
-            $this->_unitOfWork->studentAttendances()->update($studentInfo->getStudentAttendances());
-            $this->_unitOfWork->studentProgresses()->update($studentInfo->getStudentProgresses());
-            $this->_unitOfWork->commit();
-        }
-
-//        $disciplinePlanId = $disciplinePlan->getid();
-//        $existingSemesterDisciplinePlan = $this->_unitOfWork->disciplinePlans()
-//            ->where("DisciplinePlan.studyplan = $studyPlanId
-//            AND DisciplinePlan.discipline = $disciplineId
-//            AND DisciplinePlan.semester = $semester
-//            AND DisciplinePlan.id != $disciplinePlanId");
-//
-//        if (!empty($existingSemesterDisciplinePlan)){
-//            throw new Exception("Указанный семестр данной дисциплины  уже содержится в учебном плане!");
-//        }
-//        $studyPlan = $this->_unitOfWork->studyPlans()->find($studyPlanId);
-//        $discipline = $this->_unitOfWork->disciplines()->find($disciplineId);
-//        $disciplinePlan->setStudyplan($studyPlan);
-//        $disciplinePlan->setDiscipline($discipline);
-//
-//        $this->_unitOfWork->disciplinePlans()->update($disciplinePlan);
-//        $this->_unitOfWork->commit();
-    }
-
     /**
      * @param UnitOfWork $unitOfWork
      */
@@ -190,12 +162,5 @@ class PerformanceManager
         $this->_unitOfWork = $unitOfWork;
     }
 
-//    public function getAttendancesStudent(Group $group, $studyPlanId){
-//        $studyplan = $this->_unitOfWork->studyPlans()->find($studyPlanId);
-//        $group->setStudyplan($studyplan);
-//
-//        $this->_unitOfWork->groups()->create($group);
-//        $this->_unitOfWork->commit();
-//    }
 
 }

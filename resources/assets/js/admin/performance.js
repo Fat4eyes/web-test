@@ -65,7 +65,9 @@ $(document).ready(function () {
                     if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
                         state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
                     }
-                    console.log(this.students()[parentIndex]);
+                    this.students()[parentIndex].studentAttendances[index].visitStatus = state.slice(-1);
+                    // console.log(state.slice(-1));
+                    // console.log(this.students()[parentIndex]);
                     document.getElementById(id).className = state;
                 },
                 showTogglePractical: function (index, parentIndex) {
@@ -74,50 +76,29 @@ $(document).ready(function () {
                     if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
                         state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
                     }
+                    this.students()[parentIndex].studentAttendances[index].visitStatus = state.slice(-1);
                     console.log(this.students()[parentIndex]);
                     document.getElementById(id).className = state;
                 },
-                showToggleLaboratory: function (student) {
-                    return;
+                showToggleLaboratory: function (index, parentIndex) {
+                    console.log(this.students()[parentIndex]);
                 },
-                // attendancesByStudent: ko.computed(function () {
-                //     var result = [],
-                //         currentLetter, currentGroup;
-                //     ko.utils.arrayForEach(self.contacts(), function (contact) {
-                //         if (contact.name[0] !== currentLetter) {
-                //             currentLetter = contact.name[0];
-                //             currentGroup = {
-                //                 letter: currentLetter,
-                //                 contacts: []
-                //             };
-                //             result.push(currentGroup);
-                //         }
-                //         currentGroup.contacts.push(contact);
-                //     });
-                //     return result;
-                // })
-            }
-            ;
+            };
             self.alter = {
                 stringify: function () {
-                    var studentAttendances = ko.mapping.toJS(self.current.studentAttendances());
-                    var studentProgresses = ko.mapping.toJS(self.current.studentProgresses());
-                    // console.log(self.filter.group().id());
-                    // console.log(self.filter.semester().id);
-                    // if (self.mode() === state.create) delete discipline.id;
+                    var studentPerformances = ko.mapping.toJS(self.current.students());
                     return JSON.stringify({
                         disciplinePlan: self.filter.semester().id,
-                        studentAttendances: studentAttendances,
-                        studentProgresses: studentProgresses,
+                        studentPerformances: studentPerformances,
                     });
                 },
                 fill: function (d) {
                     let oldStudents = ko.mapping.toJS(d);
+                    console.log(d);
                     oldStudents.forEach(studentInfo => {
 
                         if (studentInfo.studentAttendances.length > 0) {
                             self.mode(state.update);
-                            //  self.current.studentAttendances.push(d.studentProgresses);
                         }
                         else {
                             self.mode(state.create);
@@ -128,9 +109,8 @@ $(document).ready(function () {
                                 studentAttendance.disciplinePlan = self.filter.semester;
                                 studentAttendance.occupationType = 'lecture';
                                 studentAttendance.occupationNumber = i;
-                                studentAttendance.visitStatus = 1;
+                                studentAttendance.visitStatus = 0;
                                 studentInfo.studentAttendances.push(studentAttendance);
-                                // self.current.studentAttendances.push(studentAttendance);
                             }
 
                             for (let i = 1; i < self.filter.semester().countPractical + 1; i++) {
@@ -140,77 +120,16 @@ $(document).ready(function () {
                                 studentAttendance.disciplinePlan = self.filter.semester;
                                 studentAttendance.occupationType = 'practical';
                                 studentAttendance.occupationNumber = i;
-                                studentAttendance.visitStatus = 1;
+                                studentAttendance.visitStatus = 0;
                                 studentInfo.studentAttendances.push(studentAttendance);
-                                //self.current.studentAttendances.push(studentAttendance);
                             }
                         }
-
 
                         if (studentInfo.studentProgresses.length > 0) {
                             self.mode(state.update);
-                            //self.current.studentProgresses.push(d.studentProgresses);
-                            //todo присвоить students.progresses
                         }
                         else {
                             self.mode(state.create);
-                            for (let i = 1; i < self.filter.semester().countLaboratory + 1; i++) {
-                                let studentProgress = ko.toJS(self.current.studentProgress);
-                                studentProgress.id = i;
-                                studentProgress.student = d.student;
-                                studentProgress.disciplinePlan = self.filter.semester;
-                                studentProgress.occupationType = 'mark';
-                                studentProgress.workNumber = i;
-                                studentProgress.workMark = "100";
-                                studentInfo.studentProgresses.push(studentProgress);
-                                //self.current.studentProgresses.push(studentProgress);
-                            }
-                        }
-                    });
-
-                    self.current.students(oldStudents);
-                    console.log(self.current.students());
-
-                    console.log(self.mode());
-
-                    // ko.mapping.fromJS(d, {}, self.current.students());
-                },
-                empty: function () {
-                    let oldStudents = ko.mapping.toJS(data());
-                    let students = [];
-
-                    self.get.empty();
-                    console.log(oldStudents);
-                    count = 0;
-                    oldStudents.forEach(d => {
-                        students.push(d.student);
-                        if (d.studentAttendances.length > 0) {
-                            self.current.studentProgresses.push(d.studentProgresses);
-                        }
-                        else {
-                            console.log(self.filter.semester().countLecture);
-                            for (let i = 1; i < self.filter.semester().countLecture + 1; i++) {
-                                let studentAttendance = ko.toJS(self.current.studentAttendance);
-                                studentAttendance.id = i;
-                                studentAttendance.student = d.student;
-                                studentAttendance.disciplinePlan = self.filter.semester;
-                                studentAttendance.occupationType = 'lecture';
-                                studentAttendance.occupationNumber = i;
-                                studentAttendance.visitStatus = 0;
-                                self.current.studentAttendances.push(studentAttendance);
-                            }
-
-                            for (let i = 1; i < self.filter.semester().countPractical + 1; i++) {
-                                let studentAttendance = ko.toJS(self.current.studentAttendance);
-                                studentAttendance.id = self.filter.semester().countLecture + i + 1;
-                                studentAttendance.student = d.student;
-                                studentAttendance.disciplinePlan = self.filter.semester;
-                                studentAttendance.occupationType = 'practical';
-                                studentAttendance.occupationNumber = i;
-                                studentAttendance.visitStatus = 0;
-                                self.current.studentAttendances.push(studentAttendance);
-                            }
-
                             for (let i = 1; i < self.filter.semester().countLaboratory + 1; i++) {
                                 let studentProgress = ko.toJS(self.current.studentProgress);
                                 studentProgress.id = i;
@@ -219,18 +138,13 @@ $(document).ready(function () {
                                 studentProgress.occupationType = 'mark';
                                 studentProgress.workNumber = i;
                                 studentProgress.workMark = "";
-                                self.current.studentProgresses.push(studentProgress);
+                                studentInfo.studentProgresses.push(studentProgress);
                             }
-
-                            console.log(self.current.studentAttendances());
-                            console.log(self.current.studentProgresses());
                         }
                     });
-                    self.current.students(students);
-
-                    // на кнопку Сохранить
-                    // self.post.performances();
-                }
+                    self.current.students(oldStudents);
+                    console.log(self.mode());
+                },
             };
             self.filter = {
 
@@ -378,7 +292,7 @@ $(document).ready(function () {
 
                 performances: function () {
                     var url = '/api/performance/show' +
-                        '?discipline=' + self.filter.discipline().disciplineId + '&group=' + self.filter.group().id();
+                        '?discipline=' + self.filter.discipline().id + '&group=' + self.filter.group().id();
 
                     var requestOptions = {
                         url: url,
@@ -445,24 +359,23 @@ $(document).ready(function () {
                     self.current.tableWidthLecture([]);
                     self.current.tableWidthPractical([]);
                     self.current.tableWidthLaboratory([]);
-                    // self.filter.discipline = self.filter.discipline();
 
-                    let ret = [];
+                    let retLecture = [];
                     for (let i = 1; i < semester.countLecture + 1; i++)
-                        ret.push('ЛЕК ' + i);
-                    self.current.tableWidthLecture(ret);
+                        retLecture.push('ЛЕК ' + i);
+                    self.current.tableWidthLecture(retLecture);
 
                     console.log(self.filter.semester());
 
-                    let ret2 = [];
+                    let retPrectical = [];
                     for (let i = 1; i < semester.countPractical + 1; i++)
-                        ret2.push('ПРЗ ' + i);
-                    self.current.tableWidthPractical(ret2);
+                        retPrectical.push('ПРЗ ' + i);
+                    self.current.tableWidthPractical(retPrectical);
 
-                    let ret3 = [];
+                    let retLaboratory = [];
                     for (let i = 1; i < semester.countLaboratory + 1; i++)
-                        ret3.push('ЛАБ ' + i);
-                    self.current.tableWidthLaboratory(ret3);
+                        retLaboratory.push('ЛАБ ' + i);
+                    self.current.tableWidthLaboratory(retLaboratory);
 
                     self.get.performances();
                 },
@@ -476,34 +389,16 @@ $(document).ready(function () {
                     });
                 },
                 performances: function () {
-                    // var url = '/api/performance/show' +
-                    //     '?discipline=' + self.filter.discipline().disciplineId + '&group=' + self.filter.group().id();
-                    self.mode(state.create);
-                    y = self.alter.stringify();
-                    console.log(y);
+
+                    console.log(self.mode());
 
                     var requestOptions = {
                         url: self.mode() === state.create ? '/api/performance/create' : '/api/performance/update',
                         errors: self.errors,
                         data: self.alter.stringify(),
                         successCallback: function (data) {
-                            self.mode(state.none);
-                            // self.alter.empty();
-                            // self.initial.selection(null);
-                            // self.get.disciplines();
-
-                            let oldStudents = ko.mapping.toJS(data());
-                            let students = [];
-
-                            console.log(oldStudents);
-                            oldStudents.forEach(d => {
-                                students.push(d.student);
-                                self.current.studentAttendances.push(d.studentAttendances);
-                                self.current.studentProgresses.push(d.studentProgresses);
-                            });
-
-                            console.log(self.current.studentAttendances()[0]);
-                            self.current.students(students);
+                            self.mode(state.update);
+                            console.log('Success');
                         }
                     };
                     $ajaxpost(requestOptions);
@@ -512,6 +407,18 @@ $(document).ready(function () {
 
             self.get.settings();
 
+            self.actions = {
+                update: function () {
+                    self.post.performances();
+                    // self.current.discipline.isValid()
+                    //     ? self.post.discipline()
+                    //     : self.validation[$('[accept-validation]').attr('id')].open();
+                },
+                cancel: function () {
+                    self.get.performances();
+                },
+            };
+
             //SUBSCRIPTIONS
 
             self.filter.profile.subscribe(function (value) {
@@ -519,13 +426,11 @@ $(document).ready(function () {
                     self.post.settings({'result_profile': self.filter.profile().id()});
                     self.get.groups();
                     self.get.disciplines();
-                    // self.get.empty();
                     return;
                 }
                 self.filter
                     .groups([]);
                 self.post.settings({'result_profile': null});
-                // self.get.empty();
             });
             self.filter.group.subscribe(function (value) {
                 if (value) {
@@ -533,13 +438,11 @@ $(document).ready(function () {
                     self.get.empty();
                     self.get.disciplines();
                     self.get.semesters();
-                    // self.get.results();
                     return;
                 }
                 self.get.empty();
                 self.filter.uniqueDisciplines([]);
                 self.post.settings({'result_group': null});
-                // self.get.results();
             });
             self.filter.discipline.subscribe(function (value) {
                 if (value) {
@@ -547,7 +450,6 @@ $(document).ready(function () {
                     self.get.empty();
                     console.log(self.filter.discipline());
                     self.get.semesters();
-                    // self.get.results();
                     return;
                 }
                 self.filter.semesters([]);
@@ -567,22 +469,6 @@ $(document).ready(function () {
             });
             return returnStandart.call(self);
         };
-    };
-    self.actions = {
-        update: function () {
-            self.post.performances();
-            // self.current.discipline.isValid()
-            //     ? self.post.discipline()
-            //     : self.validation[$('[accept-validation]').attr('id')].open();
-        },
-        cancel: function () {
-            y = 'нет';
-            // if (self.mode() === state.create) {
-            //     self.alter.empty();
-            //     self.mode(state.none);
-            // }
-            // self.mode(state.info);
-        },
     };
 
     ko.applyBindings(performanceViewModel());

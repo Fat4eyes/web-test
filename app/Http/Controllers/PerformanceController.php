@@ -25,22 +25,6 @@ class PerformanceController extends Controller
         $this->_performanceManager = $performanceManager;
     }
 
-    public function getStudentAttendancesByStudentAndDisciplinePlanId(Request $request)
-    {
-        try {
-            $studentId = $request->query('student');
-            $disciplineId = $request->query('discipline');
-
-            $studentAttendance = $this->_performanceManager
-                ->getStudentAttendancesByStudent($studentId, $disciplineId);
-            $result = $studentAttendance;
-
-            return $this->successJSONResponse($result);
-        } catch (Exception $exception) {
-            return $this->faultJSONResponse($exception->getMessage());
-        }
-    }
-
     public function getStudentPerformancesByStudentAndDisciplinePlan(Request $request)
     {
         try {
@@ -59,13 +43,8 @@ class PerformanceController extends Controller
     {
         try {
             $disciplinePlanId = $request->json('disciplinePlan');
-            $studentAttendances = $request->json('studentAttendances');
-            $studentProgresses = $request->json('studentProgresses');
-            $this->_performanceManager->createStudentAttendances($studentAttendances, $disciplinePlanId);
-            $this->_performanceManager->createStudentProgresses($studentProgresses, $disciplinePlanId);
-
-            //array_push($studentPerformanceInfos, $studentPerformance);
-//            $result = $groupId;
+            $studentPerformances = $request->json('studentPerformances');
+            $this->_performanceManager->createStudentPerformances($studentPerformances, $disciplinePlanId);
 
             return $this->successJSONResponse();
         } catch (Exception $exception) {
@@ -76,44 +55,15 @@ class PerformanceController extends Controller
     public function updateStudentPerformances(Request $request)
     {
         try {
-            $planData = $request->json('disciplinePlan');
-            $studyPlanId = $request->json('studyPlanId');
-            $disciplineId = $request->json('disciplineId');
+            $disciplinePlanId = $request->json('disciplinePlan');
+            $studentPerformances = $request->json('studentPerformances');
+            $this->_performanceManager->updateStudentPerformances($studentPerformances, $disciplinePlanId);
 
-            $disciplinePlan = new DisciplinePlan();
-            $disciplinePlan->fillFromJson($planData);
-            $semester = $disciplinePlan->getSemester();
-            $this->_studyPlanManager->updateDisciplinePlan($disciplinePlan, $studyPlanId, $disciplineId, $semester);
             return $this->successJSONResponse();
         } catch (Exception $exception) {
             return $this->faultJSONResponse($exception->getMessage());
         }
     }
-
-
-    public function getPerformance(Request $request)
-    {
-        try {
-            return $this->successJSONResponse($request);
-        } catch (Exception $exception) {
-            return $this->faultJSONResponse($exception->getMessage());
-        }
-    }
-
-    public function getPerformanceByGroupName(Request $request)
-    {
-        try {
-            // $studentData = $request->json('student');
-            $groupId = $request->json('groupId');
-            $groupId = 1;
-            $students = $this->_groupManager->getGroupStudents($groupId);
-            return $this->successJSONResponse($students);
-
-        } catch (Exception $exception) {
-            return $this->faultJSONResponse($exception->getMessage());
-        }
-    }
-
 
     public function getGroupStudents(Request $groupId)
     {

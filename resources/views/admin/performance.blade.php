@@ -118,8 +118,10 @@
                                     </td>
                                     <!-- ko foreach: $data.studentProgresses -->
                                     <td rel="input">
-                                        <input data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index(), 'Value':$data.workMark},
-                                               click: function () {$root.current.showToggleLaboratory($index(),$parentContext.$index())}"
+                                        <input type="text" validate
+                                               data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index()},
+                                               value: $data.workMark,
+                                               validationElement: workMark"
                                                class="filter-input">
                                     </td>
                                     <!-- /ko -->
@@ -127,15 +129,15 @@
                                 </tbody>
                             </table>
                         </section>
-                        {{--<div class="details-row float-buttons">--}}
-                            {{--<div class="details-column float-right width-100p">--}}
-                                {{--<button class="cancel" data-bind="click: $root.actions.cancel">Отмена</button>--}}
-                                {{--<button id="bUpdateStudyplanItem"--}}
+                        <div class="details-row float-buttons">
+                            <div class="details-column float-right width-100p">
+                                <button class="cancel" data-bind="click: $root.actions.cancel">Отмена</button>
+                                <button id="bUpdateStudyplanItem"
                                         {{--accept-validation title="Проверьте правильность заполнения полей"--}}
-                                        {{--class="approve" data-bind="click: $root.actions.update">Сохранить--}}
-                                {{--</button>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                                        class="approve" data-bind="click: $root.actions.update">Сохранить
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -160,20 +162,20 @@
                 <div class="filter-block-performance">
                     <label class="title">Дисциплина</label>
                     <select data-bind="options: $root.filter.uniqueDisciplines,
-                                         optionsText: function(item) {
+                       optionsText: function(item) {
                        return item.discipline;
                        },
-              value: $root.filter.discipline,
+                       value: $root.filter.discipline,
                        optionsCaption: 'Выберите дисциплину',
                        enable: $root.filter.group"></select>
                 </div>
                 <div class="filter-block-performance">
                     <label class="title">Семестр</label>
                     <select data-bind="options: $root.filter.semesters,
-                                         optionsText: function(item) {
+                       optionsText: function(item) {
                        return item.semester + ' семестр'
                        },
-              value: $root.filter.semester,
+                       value: $root.filter.semester,
                        optionsCaption: 'Выберите семестр',
                        enable: $root.filter.discipline"></select>
                 </div>

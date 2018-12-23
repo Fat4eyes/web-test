@@ -211,35 +211,11 @@ Route::group(['prefix' => 'api'], function() {
     Route::group(['prefix' => 'performance',
         'middleware' => 'checkRole:'.UserRole::Admin.'|'.UserRole::Lecturer],
         function () {
-            Route::post('attendances', 'PerformanceController@getStudentAttendancesByStudentAndDisciplinePlanId');
-            Route::post('progresses', 'PerformanceController@getStudentProgressesByStudentAndDisciplinePlanId');
             Route::get('{id}/attendances', 'PerformanceController@getStudentAttendancesByStudentAndDisciplinePlan');
             Route::get('{id}/progresses', 'PerformanceController@getStudentProgressesByStudentAndDisciplinePlan');
             Route::post('show', 'PerformanceController@getStudentPerformancesByStudentAndDisciplinePlan');
             Route::post('create', 'PerformanceController@createStudentPerformances');
             Route::post('update', 'PerformanceController@updateStudentPerformances');
-
-            /*------------------------------------------------------------------------
-            *                      Работа с посещаемостью                     */
-
-
-            Route::group(['prefix' => 'attendance'], function () {
-                Route::get('{id}/marks', 'PerformanceController@getDisciplinePlanMarkTypes');
-                Route::get('{id}', 'PerformanceController@getDisciplineGroupByGroupId');
-                Route::post('create', 'PerformanceController@addDisciplinePlan');
-                Route::post('update', 'PerformanceController@updateDisciplinePlan');
-                Route::post('delete/{id}', 'PerformanceController@deleteDisciplinePlan');
-            });
-
-            /*------------------------------------------------------------------------
-            *                      Работа с оценками по дисциплинам            */
-
-            Route::group(['prefix' => 'progress'], function () {
-                Route::post('create', 'PerformanceController@addDisciplinePlan');
-                Route::post('update', 'PerformanceController@updateDisciplinePlan');
-                Route::post('delete/{id}', 'PerformanceController@deleteDisciplinePlan');
-                Route::post('linkTest', 'PerformanceController@linkMarkToTest');
-            });
         });
 
 
