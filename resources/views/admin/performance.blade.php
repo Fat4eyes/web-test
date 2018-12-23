@@ -43,17 +43,15 @@
                                 <tr>
                                     <td style="padding-bottom: 6px; padding-top: 6px;">
                                         <span class="info-performance"
-                                              data-bind="text: $root.current.student().studentInitials($data)"></span>
+                                              data-bind="text: $root.current.student().studentInitials($data.student)"></span>
                                     </td>
-                                    <!-- ko foreach: $root.current.studentAttendances -->
-                                    <!-- ko if: $data.student.id == $parentContext.$data.id -->
+                                    <!-- ko foreach: $data.studentAttendances -->
                                     <!-- ko if: $data.occupationType === "lecture" -->
                                     <span data-bind="$data.student"></span>
-                                    <td rel="toggle" class="state0"
-                                        data-bind="attr: {'id': 'toggleLecture'+$parentContext.$index()+'_'+$index()},
+                                    <td rel="toggle"
+                                        data-bind="attr: {'id': 'toggleLecture'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
                                                  click: function () {$root.current.showToggleLecture($index(),$parentContext.$index())}">
                                     </td>
-                                    <!-- /ko -->
                                     <!-- /ko -->
                                     <!-- /ko -->
                                 </tr>
@@ -80,16 +78,14 @@
                                 <tr>
                                     <td style="padding-bottom: 6px; padding-top: 6px;">
                                         <span class="info-performance"
-                                              data-bind="text: $root.current.student().studentInitials($data)"></span>
+                                              data-bind="text: $root.current.student().studentInitials($data.student)"></span>
                                     </td>
-                                    <!-- ko foreach: $root.current.studentAttendances -->
-                                    <!-- ko if: $data.student.id == $parentContext.$data.id -->
+                                    <!-- ko foreach: $data.studentAttendances -->
                                     <!-- ko if: $data.occupationType === "practical" -->
-                                    <td rel="toggle" class="state0"
-                                        data-bind="attr: {'id': 'togglePractical'+$parentContext.$index()+'_'+$index()},
+                                    <td rel="toggle"
+                                        data-bind="attr: {'id': 'togglePractical'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
                                                  click: function () {$root.current.showTogglePractical($index(),$parentContext.$index())}">
                                     </td>
-                                    <!-- /ko -->
                                     <!-- /ko -->
                                     <!-- /ko -->
                                 </tr>
@@ -118,16 +114,14 @@
                                 <tr>
                                     <td style="padding-bottom: 6px; padding-top: 6px;">
                                         <span class="info-performance"
-                                              data-bind="text: $root.current.student().studentInitials($data)"></span>
+                                              data-bind="text: $root.current.student().studentInitials($data.student)"></span>
                                     </td>
-                                    <!-- ko foreach: $root.current.studentProgresses -->
-                                    <!-- ko if: $data.student.id == $parentContext.$data.id -->
+                                    <!-- ko foreach: $data.studentProgresses -->
                                     <td rel="input">
-                                        <input data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index()},
+                                        <input data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index(), 'Value':$data.workMark},
                                                click: function () {$root.current.showToggleLaboratory($index(),$parentContext.$index())}"
                                                class="filter-input">
                                     </td>
-                                    <!-- /ko -->
                                     <!-- /ko -->
                                 </tr>
                                 </tbody>
@@ -136,8 +130,9 @@
                         {{--<div class="details-row float-buttons">--}}
                             {{--<div class="details-column float-right width-100p">--}}
                                 {{--<button class="cancel" data-bind="click: $root.actions.cancel">Отмена</button>--}}
-                                {{--<button id="bUpdateStudyplanItem" accept-validation title="Проверьте правильность заполнения полей"--}}
-                                        {{--class="approve" data-bind="click: $root.actions.end.update">Сохранить--}}
+                                {{--<button id="bUpdateStudyplanItem"--}}
+                                        {{--accept-validation title="Проверьте правильность заполнения полей"--}}
+                                        {{--class="approve" data-bind="click: $root.actions.update">Сохранить--}}
                                 {{--</button>--}}
                             {{--</div>--}}
                         {{--</div>--}}

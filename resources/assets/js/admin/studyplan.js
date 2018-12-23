@@ -117,19 +117,7 @@ $(document).ready(function () {
                     })
                 },
                 fill: function (d) {
-                    // console.log(d);
-
                     ko.mapping.fromJS(d, {}, self.current.discipline);
-
-                    // self.current.discipline().id(d.id()).semester(d.semester())
-                    //     .hoursAll(d.hoursAll()).hoursLecture(d.hoursLecture())
-                    //     .hoursLaboratory(d.hoursLaboratory()).hoursPractical(d.hoursPractical())
-                    //     .hoursSolo(d.hoursSolo()).countLecture(d.countLecture())
-                    //     .countLaboratory(d.countLaboratory()).countPractical(d.countPractical())
-                    //     .hasExam(d.hasExam()).hasCoursework(d.hasCoursework())
-                    //     .hasCourseProject(d.hasCourseProject()).hasDesignAssignment(d.hasDesignAssignment())
-                    //     .hasEssay(d.hasEssay()).hasHomeTest(d.hasHomeTest()).hasAudienceTest(d.hasAudienceTest())
-                    //     .discipline(d.discipline()).disciplineId(d.disciplineId());
                 },
                 empty: function () {
                     self.current.discipline().id(0).semester('')
@@ -141,14 +129,6 @@ $(document).ready(function () {
                         .hasAudienceTest(true).discipline('').disciplineId(0);
                 }
             };
-            // self.current.hasSemester = {
-            //     showItem: function (index) {
-            //         if (index == 0)
-            //             return true;
-            //
-            //         return self.current.disciplines[index - 1].semester != self.current.disciplines[index].semester;
-            //     }
-            // };
             self.actions = {
                 show: function (data) {
                     var isCurrent = self.current.discipline().id() === data.id();
