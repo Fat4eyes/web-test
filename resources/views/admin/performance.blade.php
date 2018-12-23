@@ -26,14 +26,31 @@
 
                         <section id="content-tab1" class="table-wrapper"
                                  data-bind="visible: $root.current.tableWidthLecture().length > 0">
-                            <table>
+                            <table style="float: left; width: auto; border-right:none">
                                 <thead>
                                 <tr>
-                                    <th>
+                                    <th style="height: 54px;">
                                         <span class="info">СТУДЕНТ</span>
                                     </th>
+                                </tr>
+                                </thead>
+                                <tbody data-bind='foreach: $root.current.students'>
+                                <tr>
+                                    <td height="40px"
+                                        style="padding-bottom: 6px; padding-top: 6px;">
+                                        <span class="info-performance"
+                                              data-bind="text: $root.current.student().studentInitials($data.student)"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="overflow-y:auto; overflow-x:auto;">
+                            <table style="overflow: auto; float: left; width: 100%">
+                                <thead>
+                                <tr>
                                     <!-- ko foreach: $root.current.tableWidthLecture -->
-                                    <th>
+                                    <th height="54px" width="30px">
                                         <span class="info" data-bind="text: $data"></span>
                                     </th>
                                     <!-- /ko -->
@@ -41,14 +58,11 @@
                                 </thead>
                                 <tbody data-bind='foreach: $root.current.students'>
                                 <tr>
-                                    <td style="padding-bottom: 6px; padding-top: 6px;">
-                                        <span class="info-performance"
-                                              data-bind="text: $root.current.student().studentInitials($data.student)"></span>
-                                    </td>
                                     <!-- ko foreach: $data.studentAttendances -->
                                     <!-- ko if: $data.occupationType === "lecture" -->
                                     <span data-bind="$data.student"></span>
-                                    <td rel="toggle"
+                                    <td height="40px" width="30px"
+                                        rel="toggle"
                                         data-bind="attr: {'id': 'toggleLecture'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
                                                  click: function () {$root.current.showToggleLecture($index(),$parentContext.$index())}">
                                     </td>
@@ -57,77 +71,107 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </section>
+
                         <section id="content-tab2" class="table-wrapper"
                                  data-bind="visible: $root.current.tableWidthPractical().length > 0">
-                            <table>
-                                <thead class="items-body">
-
+                            <table style="float: left; width: auto; border-right:none">
+                                <thead>
                                 <tr>
-                                    <th>
+                                    <th style="height: 54px;">
                                         <span class="info">СТУДЕНТ</span>
                                     </th>
-                                    <!-- ko foreach: $root.current.tableWidthPractical -->
-                                    <th>
-                                        <span class="info" data-bind="text: $data"></span>
-                                    </th>
-                                    <!-- /ko -->
                                 </tr>
                                 </thead>
-                                <tbody class="items-body" data-bind='foreach: $root.current.students'>
+                                <tbody data-bind='foreach: $root.current.students'>
                                 <tr>
-                                    <td style="padding-bottom: 6px; padding-top: 6px;">
+                                    <td height="40px"
+                                        style="padding-bottom: 6px; padding-top: 6px;">
                                         <span class="info-performance"
                                               data-bind="text: $root.current.student().studentInitials($data.student)"></span>
                                     </td>
-                                    <!-- ko foreach: $data.studentAttendances -->
-                                    <!-- ko if: $data.occupationType === "practical" -->
-                                    <td rel="toggle"
-                                        data-bind="attr: {'id': 'togglePractical'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
-                                                 click: function () {$root.current.showTogglePractical($index(),$parentContext.$index())}">
-                                    </td>
-                                    <!-- /ko -->
-                                    <!-- /ko -->
                                 </tr>
                                 </tbody>
-
                             </table>
+
+                            <div style="overflow-y:auto; overflow-x:auto;">
+                                <table style="overflow: auto; float: left; width: 100%">
+                                    <thead>
+                                    <tr>
+                                        <!-- ko foreach: $root.current.tableWidthPractical -->
+                                        <th height="54px" width="30px">
+                                            <span class="info" data-bind="text: $data"></span>
+                                        </th>
+                                        <!-- /ko -->
+                                    </tr>
+                                    </thead>
+                                    <tbody data-bind='foreach: $root.current.students'>
+                                    <tr>
+                                        <!-- ko foreach: $data.studentAttendances -->
+                                        <!-- ko if: $data.occupationType === "practical" -->
+                                        <td height="40px" width="30px"
+                                            rel="toggle"
+                                            data-bind="attr: {'id': 'togglePractical'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
+                                                 click: function () {$root.current.showTogglePractical($index(),$parentContext.$index())}">
+                                        </td>
+                                        <!-- /ko -->
+                                        <!-- /ko -->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </section>
+
                         <section id="content-tab3" class="table-wrapper"
                                  data-bind="visible: $root.current.tableWidthLaboratory().length > 0">
-                            <table>
-                                <thead class="items-body">
-
+                            <table style="float: left; width: auto; border-right:none">
+                                <thead>
                                 <tr>
-                                    <th>
+                                    <th style="height: 54px;">
                                         <span class="info">СТУДЕНТ</span>
                                     </th>
-                                    <!-- ko foreach: $root.current.tableWidthLaboratory -->
-                                    <th>
-                                        <span class="info" data-bind="text: $data"></span>
-                                    </th>
-                                    <!-- /ko -->
                                 </tr>
                                 </thead>
-
-                                <tbody class="items-body" data-bind='foreach: $root.current.students'>
+                                <tbody data-bind='foreach: $root.current.students'>
                                 <tr>
-                                    <td style="padding-bottom: 6px; padding-top: 6px;">
+                                    <td height="40px"
+                                        style="padding-bottom: 6px; padding-top: 6px;">
                                         <span class="info-performance"
                                               data-bind="text: $root.current.student().studentInitials($data.student)"></span>
                                     </td>
-                                    <!-- ko foreach: $data.studentProgresses -->
-                                    <td rel="input">
-                                        <input type="text" validate
-                                               data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index()},
-                                               value: $data.workMark,
-                                               validationElement: workMark"
-                                               class="filter-input">
-                                    </td>
-                                    <!-- /ko -->
                                 </tr>
                                 </tbody>
                             </table>
+
+                            <div style="overflow-y:auto; overflow-x:auto;">
+                                <table style="overflow: auto; float: left; width: 100%">
+                                    <thead>
+                                    <tr>
+                                        <!-- ko foreach: $root.current.tableWidthLaboratory -->
+                                        <th height="54px" width="30px">
+                                            <span class="info" data-bind="text: $data"></span>
+                                        </th>
+                                        <!-- /ko -->
+                                    </tr>
+                                    </thead>
+                                    <tbody data-bind='foreach: $root.current.students'>
+                                    <tr>
+                                        <!-- ko foreach: $data.studentProgresses -->
+                                        <td height="40px" width="30px"
+                                            rel="input">
+                                            <input  style="background: #EDEEF0; border: none"
+                                                    type="text" validate
+                                                   data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index()},
+                                               value: $data.workMark,
+                                               validationElement: workMark"
+                                                   class="filter-input">
+                                        </td>
+                                        <!-- /ko -->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </section>
                         <div class="details-row float-buttons">
                             <div class="details-column float-right width-100p">

@@ -6,9 +6,12 @@ table {
     border-collapse: collapse;
     border: 1px solid black;
     margin: 15px auto;
-    width: 100%;
-    overflow: scroll;
     border-spacing: 0;
+}
+
+tbody {
+    background: #EDEEF0;
+    color: #6C7A89;
 }
 
 th {
@@ -21,6 +24,7 @@ th {
     border: 1px solid #BFBFBF;
     padding: 5px 10px;
     text-align: center;
+    width: auto;
 }
 
 .filter-input {
@@ -66,10 +70,8 @@ th {
 
 .table-wrapper {
     padding-top: 45px;
-    overflow-x: scroll;
-    overflow-y: visible;
     padding-bottom: 15px;
-    width: 110%;
+    width: 116.3%;
     float: left;
     position: relative;
     min-height: 1px;
