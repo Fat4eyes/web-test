@@ -23,7 +23,7 @@ $(document).ready(function(){
             self.initial ={
                 types: ko.observableArray(ko.mapping.fromJS(array.question)()),
                 complexity: ko.observableArray(ko.mapping.fromJS(array.complexity)()),
-                langs: ["C", "PHP", "Pascal"]
+                langs: ["C", "PHP", "Pascal", "JavaScript"]
             };
 
             self.current = {
