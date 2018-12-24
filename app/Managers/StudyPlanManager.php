@@ -58,6 +58,10 @@ class StudyPlanManager
             ->where('DisciplinePlan.studyplan = '.$planId);
     }
 
+//    public function getDisciplineByStudyplan($){
+//
+//    }
+
     public function getPlansDisciplinesByStudyplanAndNamePaginated($pageNum, $pageSize, $name, $studyplanId){
         return $this->_unitOfWork->disciplinePlans()
             ->getPlansDisciplinesByStudyplanAndNamePaginated($pageSize, $pageNum, $studyplanId, $name);

@@ -1,11 +1,11 @@
 <?php
 
 
-
+use Doctrine\ORM\Mapping as ORM;
 /**
  * StudentAttendance
  */
-class StudentAttendance extends BaseEntity
+class StudentAttendance extends BaseEntity implements JsonSerializable
 {
     /**
      * @var integer
@@ -22,9 +22,11 @@ class StudentAttendance extends BaseEntity
      */
     protected $visitStatus;
 
-    protected $disciplineGroup;
+    /**
+     * @var \DisciplinePlan
+     */
 
-    protected $studentGroup;
+    protected $disciplinePlan;
 
     /**
      * @var integer
@@ -36,10 +38,17 @@ class StudentAttendance extends BaseEntity
      */
     protected $student;
 
-    /**
-     * @var \DisciplineGroup
-     */
-    protected $discipline_group;
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'student' => $this->student,
+            'disciplinePlan' => $this->disciplinePlan,
+            'occupationType' => $this->occupationType,
+            'occupationNumber' => $this->occupationNumber,
+            'visitStatus' => $this->visitStatus,
+        );
+    }
 
     /**
      * @return int
@@ -91,19 +100,19 @@ class StudentAttendance extends BaseEntity
     }
 
     /**
-     * @return DisciplineGroup
+     * @return DisciplinePlan
      */
-    public function getDisciplineGroup()
+    public function getDisciplinePlan()
     {
-        return $this->discipline_group;
+        return $this->disciplinePlan;
     }
 
     /**
-     * @param DisciplineGroup $discipline_group
+     * @param DisciplinePlan $disciplinePlan
      */
-    public function setDisciplineGroup($discipline_group)
+    public function setDisciplinePlan($disciplinePlan)
     {
-        $this->discipline_group = $discipline_group;
+        $this->disciplinePlan = $disciplinePlan;
     }
 
     /**
@@ -129,23 +138,5 @@ class StudentAttendance extends BaseEntity
     {
         $this->visitStatus = $visitStatus;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getStudentGroup()
-    {
-        return $this->studentGroup;
-    }
-
-    /**
-     * @param mixed $studentGroup
-     */
-    public function setStudentGroup($studentGroup)
-    {
-        $this->studentGroup = $studentGroup;
-    }
-
-
 }
 

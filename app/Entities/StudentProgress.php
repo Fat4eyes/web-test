@@ -1,11 +1,11 @@
 <?php
 
 
-
+use Doctrine\ORM\Mapping as ORM;
 /**
  * StudentAttendance
  */
-class StudentProgress extends BaseEntity
+class StudentProgress extends BaseEntity implements JsonSerializable
 {
 
     /**
@@ -14,13 +14,10 @@ class StudentProgress extends BaseEntity
     protected $id;
 
     /**
-     * @var \DisciplineGroup
+     * @var \DisciplinePlan
      */
-    protected $disciplineGroup;
+    protected $disciplinePlan;
 
-    /**
-     * @var \StudentGroup
-     */
     protected $student;
 
     /**
@@ -31,6 +28,18 @@ class StudentProgress extends BaseEntity
     protected $workNumber;
 
     protected $workMark;
+
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'student' => $this->student,
+            'disciplinePlan' => $this->disciplinePlan,
+            'occupationType' => $this->occupationType,
+            'workNumber' => $this->workNumber,
+            'workMark' => $this->workMark,
+        );
+    }
 
     /**
      * @return int
@@ -49,32 +58,26 @@ class StudentProgress extends BaseEntity
     }
 
     /**
-     * @return DisciplineGroup
+     * @return DisciplinePlan
      */
-    public function getDisciplineGroup()
+    public function getDisciplinePlan()
     {
-        return $this->disciplineGroup;
+        return $this->disciplinePlan;
     }
 
     /**
-     * @param DisciplineGroup $disciplineGroup
+     * @param DisciplinePlan $disciplinePlan
      */
-    public function setDisciplineGroup($disciplineGroup)
+    public function setDisciplinePlan($disciplinePlan)
     {
-        $this->disciplineGroup = $disciplineGroup;
+        $this->disciplinePlan = $disciplinePlan;
     }
 
-    /**
-     * @return StudentGroup
-     */
     public function getStudent()
     {
         return $this->student;
     }
 
-    /**
-     * @param StudentGroup $student
-     */
     public function setStudent($student)
     {
         $this->student = $student;

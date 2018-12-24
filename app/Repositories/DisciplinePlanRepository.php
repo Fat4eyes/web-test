@@ -45,4 +45,20 @@ class DisciplinePlanRepository extends BaseRepository
 
         return new PaginationResult($data, $count);
     }
+
+    public function getPlansDisciplinesByDisciplinPlanId($disciplinePlanId){
+        $qb = $this->repo->createQueryBuilder('dp');
+        $query = $qb;
+
+        $query = $query->join(Discipline::class, 'd', Join::WITH, 'd.id = dp.discipline')
+            ->select('d.name AS discipline, d.id AS disciplineId, dp.id, dp.semester, 
+            dp.hoursAll, dp.hoursLecture, dp.hoursPractical, dp.hoursLaboratory, dp.hoursSolo, 
+            dp.countLecture, dp.countPractical, dp.countLaboratory, 
+            dp.hasExam, dp.hasCoursework, dp.hasCourseProject, dp.hasDesignAssignment, dp.hasEssay, dp.hasAudienceTest, dp.hasHomeTest')
+            ->where('dp.id = :disciplinePlanId');
+
+        $query->setParameter('id',$disciplinePlanId);
+
+        return $query->execute();
+    }
 }

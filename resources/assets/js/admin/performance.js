@@ -1,11 +1,11 @@
-$(document).ready(function(){
-    var performanceViewModel = function(){
-        return new function(){
+$(document).ready(function () {
+
+    var performanceViewModel = function () {
+        return new function () {
             var self = this;
 
             initializeViewModel.call(self, {
                 page: menu.admin.performance,
-                pagination: 20,
                 mode: true
             });
 
@@ -15,6 +15,10 @@ $(document).ready(function(){
 
             self.settings = ko.observable(null);
             self.current = {
+                disciplineGroup: ko.validatedObservable(),
+                tableWidthLecture: ko.observableArray([]),
+                tableWidthPractical: ko.observableArray([]),
+                tableWidthLaboratory: ko.observableArray([]),
                 students: ko.observableArray([]),
                 student: ko.validatedObservable({
                     id: ko.observable(''),
@@ -32,602 +36,437 @@ $(document).ready(function(){
                         pattern: '^[А-ЯЁ][а-яё]+(\-{1}(?:[А-ЯЁ]{1}(?:[а-яё]+)))?$',
                         maxLength: 80
                     }),
-                    studentAttendances: ko.observableArray([]),
-                    studentProgresses: ko.observableArray([]),
+                    studentInitials: function (data) {
+                        return data.lastName + " " + data.firstName.toString().charAt(0) + "." + data.patronymic.toString().charAt(0) + ".";
+                    },
                 }),
-                planId: ko.observable()
-
-                //performances                    results: ko.observableArray([]),
-
-                // student: ko.validatedObservable({
-                //     id: ko.observable(''),
-                //     firstname: ko.observable('').extend({
-                //         required: true,
-                //         pattern: '^[А-ЯЁ][а-яё]+(\-{1}(?:[А-ЯЁ]{1}(?:[а-яё]+)))?$',
-                //         maxLength: 80
-                //     }),
-                //     lastname: ko.observable('').extend({
-                //         required: true,
-                //         pattern: '^[А-ЯЁ][а-яё]+(\-{1}(?:[А-ЯЁ]{1}(?:[а-яё]+)))?$',
-                //         maxLength: 80
-                //     }),
-                //     patronymic: ko.observable('').extend({
-                //         pattern: '^[А-ЯЁ][а-яё]+(\-{1}(?:[А-ЯЁ]{1}(?:[а-яё]+)))?$',
-                //         maxLength: 80
-                //     }),
-                //     group: ko.observable(null).extend({required: true}),
-                //     email: ko.observable('').extend({required: true, email: true}),
-                //     password: ko.observable('').extend({
-                //         required: true,
-                //         minLength: 6,
-                //         maxLength: 16
-                //     }),
-                //     active: ko.observable(true)
-                // }),
-                // password: ko.observable(null).extend({
-                //     required: true,
-                //     minLength: 6,
-                //     maxLength: 16
-                // })
+                studentAttendances: ko.observableArray([]),
+                studentProgresses: ko.observableArray([]),
+                studentAttendance: ko.observable({
+                    id: ko.observable(''),
+                    occupationNumber: ko.observable('0'),
+                    occupationType: ko.observable('lecture'),
+                    visitStatus: ko.observable('0'),
+                    student: ko.observable(''),
+                    disciplinePlan: ko.observable(''),
+                }),
+                studentProgress: ko.observable({
+                    id: ko.observable(''),
+                    workNumber: ko.observable(''),
+                    occupationType: ko.observable(''),
+                    workMark: ko.observable(''),
+                    student: ko.observable(''),
+                    disciplinePlan: ko.observable(''),
+                }),
+                planId: ko.observable(),
+                showToggleLecture: function (index, parentIndex) {
+                    let id = 'toggleLecture' + parentIndex + '_' + index;
+                    let state = 'state0';
+                    if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
+                        state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
+                    }
+                    this.students()[parentIndex].studentAttendances[index].visitStatus = state.slice(-1);
+                    // console.log(state.slice(-1));
+                    // console.log(this.students()[parentIndex]);
+                    document.getElementById(id).className = state;
+                },
+                showTogglePractical: function (index, parentIndex) {
+                    let id = 'togglePractical' + parentIndex + '_' + index;
+                    let state = 'state0';
+                    if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
+                        state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
+                    }
+                    this.students()[parentIndex].studentAttendances[index].visitStatus = state.slice(-1);
+                    console.log(this.students()[parentIndex]);
+                    document.getElementById(id).className = state;
+                },
+                showToggleLaboratory: function (index, parentIndex) {
+                    console.log(this.students()[parentIndex]);
+                },
             };
-            //
-            // self.filter = {
-            //     discipline: ko.observable(),
-            //     group : ko.observable(),
-            //     clear: function(){
-            //         self.filter.discipline(null).group(null);
-            //     }
-            // };
+            self.alter = {
+                stringify: function () {
+                    var studentPerformances = ko.mapping.toJS(self.current.students());
+                    return JSON.stringify({
+                        disciplinePlan: self.filter.semester().id,
+                        studentPerformances: studentPerformances,
+                    });
+                },
+                fill: function (d) {
+                    let oldStudents = ko.mapping.toJS(d);
+                    console.log(d);
+                    oldStudents.forEach(studentInfo => {
+
+                        if (studentInfo.studentAttendances.length > 0) {
+                            self.mode(state.update);
+                        }
+                        else {
+                            self.mode(state.create);
+                            for (let i = 1; i < self.filter.semester().countLecture + 1; i++) {
+                                let studentAttendance = ko.toJS(self.current.studentAttendance);
+                                studentAttendance.id = i;
+                                studentAttendance.student = d.student;
+                                studentAttendance.disciplinePlan = self.filter.semester;
+                                studentAttendance.occupationType = 'lecture';
+                                studentAttendance.occupationNumber = i;
+                                studentAttendance.visitStatus = 0;
+                                studentInfo.studentAttendances.push(studentAttendance);
+                            }
+
+                            for (let i = 1; i < self.filter.semester().countPractical + 1; i++) {
+                                let studentAttendance = ko.toJS(self.current.studentAttendance);
+                                studentAttendance.id = self.filter.semester().countLecture + i + 1;
+                                studentAttendance.student = d.student;
+                                studentAttendance.disciplinePlan = self.filter.semester;
+                                studentAttendance.occupationType = 'practical';
+                                studentAttendance.occupationNumber = i;
+                                studentAttendance.visitStatus = 0;
+                                studentInfo.studentAttendances.push(studentAttendance);
+                            }
+                        }
+
+                        if (studentInfo.studentProgresses.length > 0) {
+                            self.mode(state.update);
+                        }
+                        else {
+                            self.mode(state.create);
+                            for (let i = 1; i < self.filter.semester().countLaboratory + 1; i++) {
+                                let studentProgress = ko.toJS(self.current.studentProgress);
+                                studentProgress.id = i;
+                                studentProgress.student = d.student;
+                                studentProgress.disciplinePlan = self.filter.semester;
+                                studentProgress.occupationType = 'mark';
+                                studentProgress.workNumber = i;
+                                studentProgress.workMark = "";
+                                studentInfo.studentProgresses.push(studentProgress);
+                            }
+                        }
+                    });
+                    self.current.students(oldStudents);
+                    console.log(self.mode());
+                },
+            };
             self.filter = {
 
                 profile: ko.observable(),
                 discipline: ko.observable(),
-                group: ko.observable({
-                    group: ko.observable(''),
-                    studyPlanId: ko.observable(''),
-                }),
+                group: ko.observable(),
+                semester: ko.observable(),
+
                 planId: ko.observable(),
 
                 profiles: ko.observableArray([]),
                 disciplines: ko.observableArray([]),
+
+                semesters: ko.observableArray([]),
+                uniqueDisciplines: ko.observableArray([]),
+
                 groups: ko.observableArray([]),
+                uniqueDisciplinesFunction: function () {
+                    let allDisciplines = ko.mapping.toJS(self.filter.disciplines());
+                    ret = [];
+                    allDisciplines.forEach(d => {
+                        if (!ret.find(t => t.discipline === d.discipline))
+                            ret.push(d);
+                    });
+                    console.log(ret);
+                    return ret;
+                },
+                disciplineSemesters: function () {
+                    let allDisciplines = ko.mapping.toJS(self.filter.disciplines());
+                    ret = [];
+                    allDisciplines.forEach(d => {
+                        if (d.discipline === self.filter.discipline().discipline)
+                            ret.push(d);
+                    });
+                    console.log(ret);
+                    return ret;
+                },
 
                 set: {
-                    profile: function(){
+                    profile: function () {
                         var id = self.settings().result_profile;
                         if (!id) return;
-                        $.each(self.filter.profiles(), function(i, item){
-                            if (item.id() == id()){
+                        $.each(self.filter.profiles(), function (i, item) {
+                            if (item.id() == id()) {
                                 self.filter.profile(item);
                             }
                         });
                     },
-                    discipline: function(){
-                        var id = self.settings().result_discipline;
+                    group: function (id) {
+                        var id = id || self.settings().result_group;
                         if (!id) return;
-                        $.each(self.filter.disciplines(), function(i, item){
-                            if (item.id() == id()){
+                        $.each(self.filter.groups(), function (i, item) {
+                            if (item.id() == id()) {
+                                self.filter.group(item);
+                            }
+                        });
+                    },
+                    discipline: function (id) {
+                        var id = id || self.settings().result_discipline;
+                        if (!id) return;
+                        $.each(self.filter.uniqueDisciplines(), function (i, item) {
+                            if (item.id == id()) {
                                 self.filter.discipline(item);
                             }
                         });
                     },
-                    group: function(id){
-                        var id = id || self.settings().result_group;
+                    semester: function (id) {
+                        var id = id || self.settings().result_semester;
                         if (!id) return;
-                        $.each(self.filter.groups(), function(i, item){
-                            if (item.id() == id()){
-                                self.filter.group(item);
-
-                               // self.filter.planId(item.studyPlanId);
-                                console.log(self.filter.group.studyPlanId);
+                        $.each(self.filter.semesters(), function (i, item) {
+                            if (item.id == id()) {
+                                self.filter.semester(item);
                             }
                         });
                     },
                 },
-                clear: function(){
+                clear: function () {
                     self.filter.group() ? self.filter.group(null) : null;
                     self.filter.discipline() ? self.filter.discipline(null) : null;
+                    self.filter.semester() ? self.filter.semester(null) : null;
                 }
             };
-            // self.filter = {
-            //     name: ko.observable(''),
-            //     group: ko.observable(),
-            //     request: ko.observable(filters.active.all),
-            //     clear: function(){
-            //         self.filter
-            //             .name('')
-            //             .group(null)
-            //             .request(filters.active.all);
-            //     },
-            //     set: {
-            //         group: function(id){
-            //             $.each(self.initial.groups(), function(i, item){
-            //                 if (item.id() == id) self.filter.group(item);
-            //             });
-            //         }
-            //     }
-            // };
-            // self.actions = {
-            //     show: function(data){
-            //         if (self.mode() === state.none || self.current.student().id() !== data.id()){
-            //             self.get.student(data.id());
-            //             return;
-            //         }
-            //         self.mode(state.none);
-            //         self.alter.empty();
-            //     },
-            //     start: {
-            //         create: function(){
-            //             self.alter.empty();
-            //             self.mode() === state.create
-            //                 ? self.mode(state.none)
-            //                 : self.mode(state.create);
-            //             commonHelper.buildValidationList(self.validation);
-            //         },
-            //         update: function(data){
-            //             self.mode(state.update);
-            //             self.alter.fill(data);
-            //             commonHelper.buildValidationList(self.validation);
-            //         },
-            //         remove: function(){
-            //             commonHelper.modal.open('#remove-request-modal');
-            //         }
-            //     },
-            //     end: {
-            //         update: function(){
-            //             self.current.student.isValid()
-            //                 ? self.post.student()
-            //                 : self.validation[$('[accept-validation]').attr('id')].open();
-            //         },
-            //         remove: function(){
-            //             self.post.request();
-            //         }
-            //     },
-            //     cancel: function(){
-            //         self.mode(state.none);
-            //         self.alter.empty();
-            //         self.current.password(null);
-            //     },
-            //
-            //     password: {
-            //         change: function(){
-            //             commonHelper.modal.open('#change-password-modal');
-            //         },
-            //         cancel: function(){
-            //             self.current.password(null);
-            //             self.validation[$('.box-modal [validate]').attr('id')].close();
-            //             commonHelper.modal.close('#change-password-modal');
-            //         },
-            //         approve: function(){
-            //             self.current.password.isValid()
-            //                 ? self.post.password()
-            //                 : self.validation[$('.box-modal [validate]').attr('id')].open();
-            //         }
-            //     },
-            //     switch: {
-            //         on: function(data, e){
-            //             self.confirm.show({
-            //                 message: 'Вы действительно хотите подтвердить заявку?',
-            //                 approve: function(){
-            //                     self.post.approval(data.id());
-            //                 }
-            //             });
-            //             e.stopPropagation();
-            //         },
-            //         off: function(data, e){
-            //             self.confirm.show({
-            //                 message: 'Заявка будет удалена. Вы действительно хотите отклонить выбранную заявку?',
-            //                 approve: function(){
-            //                     self.post.request(data.id());
-            //                 }
-            //             });
-            //             e.stopPropagation();
-            //         }
-            //     }
-            // };
-            //
-            self.alter = {
-                // set: {
-                //     group: function(id){
-                //         $.each(self.initial.groups(), function(i, item){
-                //             if (item.id() === id)
-                //                 self.current.student().group(item);
-                //         });
-                //     }
-                // },
-                stringify: {
-                    student: function(){
-                        var student = ko.mapping.toJS(self.current.student);
-                        delete student.group;
-
-                        self.mode() === state.create
-                            ? delete student.id
-                            : delete student.password;
-
-                        return JSON.stringify({
-                            student: student,
-                            groupId: self.current.student().group().id()
-                        });
-                    },
-                },
-                fill: function(data){
-                    self.current.student().id(data.id())
-                        .firstname(data.firstname()).lastname(data.lastname())
-                        .patronymic(data.patronymic())
-                    ko.mapping.fromJS(data, {}, self.filter.group);
-                },
-                empty: function(){
-                    self.current.student().id('').group(null)
-                        .firstname('').lastname('').patronymic('')
-                }
-            };
-
 
             self.get = {
-                settings: function(){
+                settings: function () {
                     var json = JSON.stringify({
                         settings: [
                             "result_profile",
                             "result_discipline",
                             "result_group",
-                            "result_test"
+                            "result_semester"
                         ]
                     });
                     $ajaxpost({
                         url: '/api/uisettings/get',
                         data: json,
                         errors: self.errors,
-                        successCallback: function(data){
+                        successCallback: function (data) {
                             self.settings(data);
                             self.get.profiles();
                         },
-                        errorCallback: function(){
+                        errorCallback: function () {
                             self.settings(null);
                             self.get.profiles();
                         }
                     });
                 },
-                profiles: function(){
+                profiles: function () {
                     $ajaxget({
                         url: '/api/profiles',
                         errors: self.errors,
-                        successCallback: function(data){
+                        successCallback: function (data) {
                             self.filter.profiles(data());
                             self.settings() ? self.filter.set.profile() : null;
                         }
                     });
                 },
-                disciplines: function(){
+                groups: function () {
                     $ajaxget({
-                        url: '/api/profile/'+ self.filter.profile().id() +'/disciplines',
+                        url: '/api/profile/' + self.filter.profile().id() + '/groups',
                         errors: self.errors,
-                        successCallback: function(data){
-                            self.filter.disciplines(data());
-                            self.settings() ? self.filter.set.discipline() : null;
+                        successCallback: function (data) {
+                            self.filter.groups(data());
+                            self.settings() ? self.filter.set.group() : null;
                         }
                     });
-                    console.log(self.filter.disciplines);
+                },
+                disciplines: function () {
+                    if (self.filter.group()) {
+                        let url = '/api/plan/discipline/show' +
+                            '?studyplan=' + self.filter.group().studyplanId();
+                        $ajaxpost({
+                            url: url,
+                            errors: self.errors,
+                            data: null,
+                            successCallback: function (data) {
+                                self.filter.disciplines(data.data());
+                                self.filter.uniqueDisciplines(self.filter.uniqueDisciplinesFunction());
+                                // self.filter.disciplines(data());
+                                self.settings() ? self.filter.set.discipline() : null;
+                            }
+                        });
+                    }
                 },
 
-
-                studyplan: function () {
-                    var name = self.filter.discipline() ? '&name=' + self.filter.groupId() : '';
-                    var url = '/api/plan/discipline/show' +
-                        '?studyplan=' + self.current.planId() + name;
+                performances: function () {
+                    var url = '/api/performance/show' +
+                        '?discipline=' + self.filter.discipline().id + '&group=' + self.filter.group().id();
 
                     var requestOptions = {
                         url: url,
                         errors: self.errors,
                         data: null,
                         successCallback: function (data) {
-                            self.current.disciplines(data.data());
+                            self.alter.fill(data());
                         }
                     };
                     $ajaxpost(requestOptions);
                 },
 
+                attendance: function () {
+                    self.current.students().forEach(d => {
+                        var url = '/api/performance/attendances' +
+                            '?discipline=' + self.filter.discipline().disciplineId + '&student=' + d.id();
 
-                groups: function(){
-                    $ajaxget({
-                        url: '/api/profile/'+ self.filter.profile().id() +'/groups',
-                        errors: self.errors,
-                        successCallback: function(data){
-                            self.filter.groups(data());
-                            self.settings() ? self.filter.set.group() : null;
-                        }
+                        var requestOptions = {
+                            url: url,
+                            errors: self.errors,
+                            data: null,
+                            successCallback: function (data) {
+                                //  self.current.student().studentAttendances(data());
+
+                                // console.log(self.current.student().studentAttendances());
+                            }
+                        };
+                        $ajaxpost(requestOptions);
                     });
                 },
-                tests: function(){
-                    $ajaxget({
-                        url: '/api/disciplines/' + self.filter.discipline().id()+ '/tests',
-                        errors: self.errors,
-                        successCallback: function(data){
-                            self.filter.tests(data());
-                            self.settings() ? self.filter.set.test() : null;
-                        }
-                    });
+                semesters: function () {
+                    if (self.filter.discipline) {
+                        self.filter.semesters(self.filter.disciplineSemesters());
+                        self.settings() ? self.filter.set.semester() : null;
+                    }
                 },
-                results: function(){
+                empty: function () {
+                    self.current.studentAttendances([]);
+                    self.current.studentProgresses([]);
+                },
+                results: function () {
                     var group = self.filter.group();
-                    var discipline = self.filter.discipline();
+                    var discipline = self.filter.discipline;
+                    var semester = self.filter.semester();
 
-                    console.log(self.filter.group().studyPlanId);
-                    if(!discipline) return;
-
-                    if (!group){
-                        group = {
-                            id : function(){ return 0;}
-                        }
+                    if (!semester) {
+                        self.get.empty();
+                        self.get.semesters();
+                        return;
                     }
 
-                    $ajaxget({
-                    //    Route::get('{id}/students', 'GroupController@getGroupStudents');
-                        url: '/api/groups/'+ group.id()
-                        + '/students',
-                        errors: self.errors,
-                        successCallback: function(data){
-                            self.current.students(data());
-                        }
-                    });
+                    if (!discipline) {
+                        self.get.empty();
+                        self.get.disciplines();
+                        return;
+                    }
+
+                    if (!group) {
+                        self.get.empty();
+                        self.get.groups();
+                        return;
+                    }
+
+                    self.current.tableWidthLecture([]);
+                    self.current.tableWidthPractical([]);
+                    self.current.tableWidthLaboratory([]);
+
+                    let retLecture = [];
+                    for (let i = 1; i < semester.countLecture + 1; i++)
+                        retLecture.push('ЛЕК ' + i);
+                    self.current.tableWidthLecture(retLecture);
+
+                    console.log(self.filter.semester());
+
+                    let retPrectical = [];
+                    for (let i = 1; i < semester.countPractical + 1; i++)
+                        retPrectical.push('ПРЗ ' + i);
+                    self.current.tableWidthPractical(retPrectical);
+
+                    let retLaboratory = [];
+                    for (let i = 1; i < semester.countLaboratory + 1; i++)
+                        retLaboratory.push('ЛАБ ' + i);
+                    self.current.tableWidthLaboratory(retLaboratory);
+
+                    self.get.performances();
                 },
-                // markScale: function(){
-                //     $ajaxget({
-                //         url: '/api/settings/get/maxMarkValue',
-                //         errors: self.errors,
-                //         successCallback: function(data){
-                //             self.current.markScale(data.value());
-                //         }
-                //     });
-                // }todo поменять со студентами
             };
             self.post = {
-                settings: function(settings){
+                settings: function (settings) {
                     $ajaxpost({
                         url: '/api/uisettings/set',
                         errors: self.errors,
                         data: JSON.stringify({settings: settings})
                     });
-                }
+                },
+                performances: function () {
+
+                    console.log(self.mode());
+
+                    var requestOptions = {
+                        url: self.mode() === state.create ? '/api/performance/create' : '/api/performance/update',
+                        errors: self.errors,
+                        data: self.alter.stringify(),
+                        successCallback: function (data) {
+                            self.mode(state.update);
+                            console.log('Success');
+                        }
+                    };
+                    $ajaxpost(requestOptions);
+                },
             };
 
             self.get.settings();
 
+            self.actions = {
+                update: function () {
+                    self.post.performances();
+                    // self.current.discipline.isValid()
+                    //     ? self.post.discipline()
+                    //     : self.validation[$('[accept-validation]').attr('id')].open();
+                },
+                cancel: function () {
+                    self.get.performances();
+                },
+            };
+
             //SUBSCRIPTIONS
 
-            self.filter.profile.subscribe(function(value){
-                if (value){
+            self.filter.profile.subscribe(function (value) {
+                if (value) {
                     self.post.settings({'result_profile': self.filter.profile().id()});
                     self.get.groups();
                     self.get.disciplines();
                     return;
                 }
                 self.filter
-                    .disciplines([])
                     .groups([]);
                 self.post.settings({'result_profile': null});
             });
-            self.filter.discipline.subscribe(function(value){
-                if (value){
-                    self.post.settings({'result_discipline': self.filter.discipline().id()});
-                    //self.get.tests();
+            self.filter.group.subscribe(function (value) {
+                if (value) {
+                    self.post.settings({'result_group': self.filter.group().id()});
+                    self.get.empty();
+                    self.get.disciplines();
+                    self.get.semesters();
                     return;
                 }
-               // self.filter.tests([]);
+                self.get.empty();
+                self.filter.uniqueDisciplines([]);
+                self.post.settings({'result_group': null});
+            });
+            self.filter.discipline.subscribe(function (value) {
+                if (value) {
+                    self.post.settings({'result_discipline': self.filter.discipline().id});
+                    self.get.empty();
+                    console.log(self.filter.discipline());
+                    self.get.semesters();
+                    return;
+                }
+                self.filter.semesters([]);
                 self.post.settings({'result_discipline': null});
             });
-            self.filter.group.subscribe(function(value){
-                if (value){
-                    self.post.settings({'result_group': self.filter.group().id()});
+            self.filter.semester.subscribe(function (value) {
+                if (value) {
+                    self.post.settings({'result_semester': self.filter.semester().id});
                     self.get.results();
                     return;
                 }
-                self.post.settings({'result_group': null});
-                self.get.results();
+                self.get.empty();
+                self.post.settings({'result_semester': null});
+                self.current.tableWidthLecture([]);
+                self.current.tableWidthPractical([]);
+                self.current.tableWidthLaboratory([]);
             });
-
-
-            // self.get = {
-            //     // students: function(){
-            //     //     var filter = self.filter;
-            //     //     var discipline = 'discipline=' + (filter.discipline() ? filter.discipline().id() : '');
-            //     //     var group = 'group=' + (filter.group() ? filter.group().id() : '');
-            //     //     var url = '/api/performance/show?' + discipline + '&' + group;
-            //     //
-            //     //     $ajaxget({
-            //     //         url: url,
-            //     //         errors: self.errors,
-            //     //         successCallback: function(data){
-            //     //             self.current.students(data.data());
-            //     //             // self.pagination.itemsCount(data.count());
-            //     //             commonHelper.tooltip({selector: '.item > .fa', side: 'top'});
-            //     //         }
-            //     //     });
-            //     // },
-            //     // student: function(id){
-            //     //     $ajaxget({
-            //     //         url: '/api/user/getStudent/' + id,
-            //     //         errors: self.errors,
-            //     //         successCallback: function(data){
-            //     //             self.alter.fill(data);
-            //     //             self.alter.set.group(data.group.id());
-            //     //             self.mode(state.info);
-            //     //         }
-            //     //     });
-            //     // },
-            //     // groups: function(){
-            //     //     $ajaxget({
-            //     //         url: '/api/groups',
-            //     //         errors: self.errors,
-            //     //         successCallback: function(data){
-            //     //             self.initial.groups(data());
-            //     //             var cookie = $.cookie();
-            //     //             if (!$.isEmptyObject(cookie)){
-            //     //                 self.filter.set.group(cookie.groupId);
-            //     //                 commonHelper.cookies.remove(cookie);
-            //     //                 return;
-            //     //             }
-            //     //             self.get.students();
-            //     //         }
-            //     //     });
-            //     // }
-            //     disciplines: function(){
-            //         $ajaxget({
-            //             url: '/api/profile/'+ self.filter.profile().id() +'/disciplines',
-            //             errors: self.errors,
-            //             successCallback: function(data){
-            //                 self.filter.disciplines(data());
-            //                 self.settings() ? self.filter.set.discipline() : null;
-            //             }
-            //         });
-            //     },
-            //     groups: function(){
-            //         $ajaxget({
-            //             url: '/api/profile/'+ self.filter.profile().id() +'/groups',
-            //             errors: self.errors,
-            //             successCallback: function(data){
-            //                 self.filter.groups(data());
-            //                 self.settings() ? self.filter.set.group() : null;
-            //             }
-            //         });
-            //     },
-            //
-            //     results: function(){
-            //         var group = self.filter.group();
-            //         var discipline = self.filter.discipline();
-            //
-            //         if(!discipline) return;
-            //
-            //         if (!group){
-            //             group = {
-            //                 id : function(){ return 0;}
-            //             }
-            //         }
-            //
-            //         if(!test){
-            //             test = {
-            //                 id : function(){ return 0;}
-            //             }
-            //         }
-            //
-            //         $ajaxget({
-            //             url: '/api/results/show?groupId='+ group.id()
-            //             + '&testId=' + test.id()
-            //             + '&disciplineId=' + discipline.id(),
-            //             errors: self.errors,
-            //             successCallback: function(data){
-            //                 self.current.results(data());
-            //             }
-            //         });
-            //     },
-            // };
-            // self.get.disciplines();
-            // self.get.groups();
-            // //
-            // // self.post = {
-            // //     request: function(studentId){
-            // //         var id = studentId ? studentId : self.current.student().id();
-            // //         $ajaxpost({
-            // //             url: '/api/user/delete/' + id,
-            // //             data: null,
-            // //             errors: self.errors,
-            // //             successCallback: function(){
-            // //                 self.actions.cancel();
-            // //                 self.get.students();
-            // //             }
-            // //         });
-            // //     },
-            // //     approval: function(id){
-            // //         $ajaxpost({
-            // //             url: '/api/user/activate/' + id,
-            // //             errors: self.errors,
-            // //             successCallback: function(){
-            // //                 self.get.students();
-            // //             }
-            // //         })
-            // //     },
-            // //     student: function(){
-            // //         $ajaxpost({
-            // //             url: '/api/groups/student/' + self.mode(),
-            // //             errors: self.errors,
-            // //             data: self.alter.stringify.student(),
-            // //             successCallback: function(){
-            // //                 self.actions.cancel();
-            // //                 self.get.students();
-            // //             }
-            // //         });
-            // //     },
-            // //     password: function(){
-            // //         $ajaxpost({
-            // //             url: '/api/user/setPassword',
-            // //             errors: self.errors,
-            // //             data: self.alter.stringify.password(),
-            // //             successCallback: function(){
-            // //                 self.actions.password.cancel();
-            // //                 self.inform.show({
-            // //                     message: 'Пароль успешно изменен'
-            // //                 });
-            // //             }
-            // //         });
-            // //     }
-            // // };
-            // //
-            // // self.filter.group.subscribe(function(){
-            // //     self.actions.cancel();
-            // //     self.pagination.currentPage(1);
-            // //     self.get.students();
-            // // });
-            //
-            //
-            // // self.filter.discipline.subscribe(function(){
-            // //     self.mode(state.none);
-            // //     self.get.students();
-            // // });
-            // // self.filter.group.subscribe(function(){
-            // //     self.mode(state.none);
-            // //     self.get.students();
-            // // });
-            // self.filter.discipline.subscribe(function(value){
-            //     if (value){
-            //         self.post.settings({'result_discipline': self.filter.discipline().id()});
-            //         return;
-            //     }
-            //     // self.post.settings({'result_discipline': null});
-            //     self.get.results();
-            // });
-            // self.filter.group.subscribe(function(value){
-            //     if (value){
-            //         self.post.settings({'result_group': self.filter.group().id()});
-            //         self.get.results();
-            //         return;
-            //     }
-            //     //todo if true and discipline true => вернуть результат
-            //     self.get.results();
-            // });
-
-
-
-
-            // self.filter.name.subscribe(function(){
-            //     self.actions.cancel();
-            //     self.pagination.currentPage(1);
-            //     self.get.students();
-            // });
-            // self.filter.request.subscribe(function(){
-            //     self.actions.cancel();
-            //     self.pagination.currentPage(1);
-            //     self.get.students();
-            // });
-            // self.pagination.itemsCount.subscribe(function(value){
-            //     if (value){
-            //         self.pagination.totalPages(Math.ceil(
-            //             value/self.pagination.pageSize()
-            //         ));
-            //     }
-            // });
-            // self.pagination.currentPage.subscribe(function(){
-            //     self.get.students();
-            // });
-
             return returnStandart.call(self);
         };
     };
@@ -635,124 +474,3 @@ $(document).ready(function(){
     ko.applyBindings(performanceViewModel());
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-$(document).ready(function(){
-    var resultsViewModel = function(){
-        return new function(){
-            var self = this;
-
-            initializeViewModel.call(self, {
-                page: menu.admin.results
-            });
-
-            self.theme = ko.observable({});
-            self.settings = ko.observable(null);
-
-            self.current = {
-                results: ko.observableArray([]),
-                markScale: ko.observable(100)
-            };
-            self.filter = {
-                profile: ko.observable(),
-                discipline: ko.observable(),
-                group: ko.observable(),
-                test: ko.observable(),
-
-                profiles: ko.observableArray([]),
-                disciplines: ko.observableArray([]),
-                groups: ko.observableArray([]),
-                tests: ko.observableArray([]),
-
-                set: {
-                    profile: function(){
-                        var id = self.settings().result_profile;
-                        if (!id) return;
-                        $.each(self.filter.profiles(), function(i, item){
-                            if (item.id() == id()){
-                                self.filter.profile(item);
-                            }
-                        });
-                    },
-                    discipline: function(){
-                        var id = self.settings().result_discipline;
-                        if (!id) return;
-                        $.each(self.filter.disciplines(), function(i, item){
-                            if (item.id() == id()){
-                                self.filter.discipline(item);
-                            }
-                        });
-                    },
-                    group: function(id){
-                        var id = id || self.settings().result_group;
-                        if (!id) return;
-                        $.each(self.filter.groups(), function(i, item){
-                            if (item.id() == id()){
-                                self.filter.group(item);
-                            }
-                        });
-                    },
-                    // test: function(){
-                    //     var id = self.settings().result_test;
-                    //     if (!id) return;
-                    //     $.each(self.filter.tests(), function(i, item){
-                    //         if (item.id() == id()){
-                    //             self.filter.test(item);
-                    //         }
-                    //     });
-                    // }todo студенты
-                },
-                clear: function(){
-                    self.filter.profile() ? self.filter.profile(null) : null;
-                    self.filter.group() ? self.filter.group(null) : null;
-                    self.filter.discipline() ? self.filter.discipline(null) : null;
-                    self.filter.test() ? self.filter.test(null) : null;
-                    self.settings(null);
-                }
-            };
-
-
-            self.actions = {
-                show: function(data){
-                    window.location.href = '/admin/result/' + data.id();
-                },
-                overall: function(){
-
-                    self.filter.profile() ? self.post.settings({'overall_profile': self.filter.profile().id()}) : null;
-                    self.filter.discipline() ? self.post.settings({'overall_discipline': self.filter.discipline().id()}): null;
-                    self.filter.group() ? self.post.settings({'overall_group': self.filter.group().id()}) : null;
-                    window.location.href = '/admin/overallresults';
-                }
-            };
-
-
-            self.filter.test.subscribe(function(value){
-                if (value){
-                    self.post.settings({'result_test': self.filter.test().id()});
-                    self.get.results();
-                    return;
-                }
-                self.current.results([]);
-                self.post.settings({'result_test': null});
-                self.get.results();
-            });
-
-
-            return returnStandart.call(self);
-        };
-    };
-
-    ko.applyBindings(resultsViewModel());
-});

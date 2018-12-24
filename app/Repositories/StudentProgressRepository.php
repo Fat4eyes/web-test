@@ -19,6 +19,12 @@ class StudentProgressRepository extends BaseRepository
         parent::__construct($em, StudentProgress::class);
     }
 
+
+    public function getStudentProgressesByStudent($studentId, $disciplinPlanId){
+        return $this->repo->findBy(array('student' => $studentId, 'disciplinePlan' => $disciplinPlanId),array('occupationType' => 'ASC', 'workNumber' => 'ASC'));
+    }
+
+
 //    function getByStudent($studentId){
 //        $query = $this->repo->createQueryBuilder('d');
 //
@@ -30,14 +36,20 @@ class StudentProgressRepository extends BaseRepository
 //        return $query->execute();
 //    }
 //
-    public function getStudentProgressesByStudent($studentId){//grouprepository
-        $query = $this->repo->createQueryBuilder('g')
-            ->join(\StudentProgress::class, 'sp', Join::WITH,
-                'g.studyplan = sp.id AND sp.student = '.$studentId)
-            ->getQuery();
 
-        return $query->execute();
-    }
+
+
+//    public function getStudentProgressesByStudent($studentId){//grouprepository
+//        $query = $this->repo->createQueryBuilder('g')
+//            ->join(\StudentProgress::class, 'sp', Join::WITH,
+//                'g.studyplan = sp.id AND sp.student = '.$studentId)
+//            ->getQuery();
+//
+//        return $query->execute();
+//    }
+
+
+
 
 //    public function getAttendancesByStudent($studentId){
 //        return $this->repo->findBy(['student' => $studentId]);

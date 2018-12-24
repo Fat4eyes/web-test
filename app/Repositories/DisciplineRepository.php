@@ -127,10 +127,10 @@ class DisciplineRepository extends BaseRepository
             ->join(Theme::class, 'th', Join::WITH, 'th.discipline = d.id')
             ->join(TestTheme::class, 'tt', Join::WITH, 'tt.theme = th.id')
             ->join(Test::class, 't', Join::WITH, 'tt.test = t.id AND t.isActive = true')
-            ->where('g.id = :groupId AND dp.startSemester <= :currentSemester')
+            ->where('g.id = :groupId AND dp.semester <= :currentSemester')
             ->setParameter('groupId', $groupId)
             ->setParameter('currentSemester', $currentSemester)
-            ->orderBy('dp.startSemester', 'DESC')
+            ->orderBy('dp.semester', 'DESC')
 
             ->getQuery();
 

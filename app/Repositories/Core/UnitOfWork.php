@@ -48,6 +48,7 @@ class UnitOfWork
     private $_dockerInfoRepo;
     private $_mediaRepo;
     private $_mediableRepo;
+    private $_disciplineGroupRepo;
     private $_studentAttendanceRepo;
     private $_studentProgressRepo;
 
@@ -113,7 +114,6 @@ class UnitOfWork
         }
         return $this->_studentProgressRepo;
     }
-
 
     public function themes(){
         if ($this->_themeRepo == null){

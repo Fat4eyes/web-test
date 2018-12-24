@@ -64,10 +64,10 @@ class StudentProgress extends \StudentProgress implements \Doctrine\ORM\Proxy\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'StudentProgress' . "\0" . 'occupationType', '' . "\0" . 'StudentProgress' . "\0" . 'occupationNumber', '' . "\0" . 'StudentProgress' . "\0" . 'visitStatus', '' . "\0" . 'StudentProgress' . "\0" . 'id', '' . "\0" . 'StudentProgress' . "\0" . 'disciplineGroup', '' . "\0" . 'StudentProgress' . "\0" . 'student', '' . "\0" . 'StudentProgress' . "\0" . 'workNumber', '' . "\0" . 'StudentProgress' . "\0" . 'workMark'];
+            return ['__isInitialized__', 'id', 'disciplinePlan', 'student', 'occupationType', 'workNumber', 'workMark'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'StudentProgress' . "\0" . 'occupationType', '' . "\0" . 'StudentProgress' . "\0" . 'occupationNumber', '' . "\0" . 'StudentProgress' . "\0" . 'visitStatus', '' . "\0" . 'StudentProgress' . "\0" . 'id', '' . "\0" . 'StudentProgress' . "\0" . 'disciplineGroup', '' . "\0" . 'StudentProgress' . "\0" . 'student', '' . "\0" . 'StudentProgress' . "\0" . 'workNumber', '' . "\0" . 'StudentProgress' . "\0" . 'workMark'];
+        return ['__isInitialized__', 'id', 'disciplinePlan', 'student', 'occupationType', 'workNumber', 'workMark'];
     }
 
     /**
@@ -173,4 +173,162 @@ class StudentProgress extends \StudentProgress implements \Doctrine\ORM\Proxy\Pr
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+
+        return parent::jsonSerialize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getId()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getId();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
+
+        return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setId($id)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setId', [$id]);
+
+        return parent::setId($id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDisciplinePlan()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDisciplinePlan', []);
+
+        return parent::getDisciplinePlan();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDisciplinePlan($disciplinePlan)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDisciplinePlan', [$disciplinePlan]);
+
+        return parent::setDisciplinePlan($disciplinePlan);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStudent()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStudent', []);
+
+        return parent::getStudent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStudent($student)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStudent', [$student]);
+
+        return parent::setStudent($student);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWorkNumber()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getWorkNumber', []);
+
+        return parent::getWorkNumber();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setWorkNumber($workNumber)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setWorkNumber', [$workNumber]);
+
+        return parent::setWorkNumber($workNumber);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWorkMark()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getWorkMark', []);
+
+        return parent::getWorkMark();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setWorkMark($workMark)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setWorkMark', [$workMark]);
+
+        return parent::setWorkMark($workMark);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOccupationType()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOccupationType', []);
+
+        return parent::getOccupationType();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOccupationType($occupationType)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOccupationType', [$occupationType]);
+
+        return parent::setOccupationType($occupationType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fillFromJson($json)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'fillFromJson', [$json]);
+
+        return parent::fillFromJson($json);
+    }
+
 }

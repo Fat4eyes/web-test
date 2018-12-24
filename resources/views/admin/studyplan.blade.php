@@ -7,8 +7,6 @@
 @endsection
 @section('content')
 
-    {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
-
     <div class="performance-wrapper">
         <div class="items-head">
             <h1 class="head-text">Детализация учебного плана</h1>
@@ -68,7 +66,6 @@
                     <tbody class="items-body" data-bind='foreach: $root.actions.sortedDiscipline()'>
                     <tr class="item" data-bind="click: $root.actions.show">
                         <td>
-                            {{--<span class=info data-bind="textI discipline">--}}
                             <span class="info" data-bind="visible: disciplineVisible, text: discipline"></span>
                         </td>
                         <td>
@@ -120,16 +117,10 @@
                             <span class="info" data-bind="if: hasHomeTest">&#10004</span>
                         </td>
                     </tr>
-
-
                     <!-- ko if: id() === $root.current.discipline().id() -->
                     <!-- ko if: $root.mode() === state.info -->
                     <tr class="details"
                         data-bind="visible: $root.current.discipline().id() > 0,  template: {name: 'update-discipline', data: $root.current.discipline}"></tr>
-                    <!-- /ko -->
-                    <!-- ko if: $root.mode() === state.update -->
-                    {{--<div class="details"--}}
-                    {{--data-bind="visible: $root.current.discipline().id() > 0, template: {name: 'update-discipline', data: $root.current.discipline}"></div>--}}
                     <!-- /ko -->
                     <!-- /ko -->
                     </tbody>

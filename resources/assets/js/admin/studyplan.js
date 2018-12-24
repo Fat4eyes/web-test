@@ -54,25 +54,25 @@ $(document).ready(function () {
                     }),
                     hoursLecture: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
                     hoursLaboratory: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
                     hoursPractical: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
                     hoursSolo: ko.observable(0).extend({
                         required: true,
-                        min: 1,
+                        min: 0,
                         max: 10000,
                         number: true
                     }),
@@ -102,8 +102,7 @@ $(document).ready(function () {
                     hasHomeTest: ko.observable(true),
                     hasAudienceTest: ko.observable(true),
                     discipline: ko.observable(''),
-                    disciplineId: ko.observable(0),
-
+                    disciplineId: ko.observable(0)
                 }),
                 planId: ko.observable()
             };
@@ -118,19 +117,7 @@ $(document).ready(function () {
                     })
                 },
                 fill: function (d) {
-                    // console.log(d);
-
                     ko.mapping.fromJS(d, {}, self.current.discipline);
-
-                    // self.current.discipline().id(d.id()).semester(d.semester())
-                    //     .hoursAll(d.hoursAll()).hoursLecture(d.hoursLecture())
-                    //     .hoursLaboratory(d.hoursLaboratory()).hoursPractical(d.hoursPractical())
-                    //     .hoursSolo(d.hoursSolo()).countLecture(d.countLecture())
-                    //     .countLaboratory(d.countLaboratory()).countPractical(d.countPractical())
-                    //     .hasExam(d.hasExam()).hasCoursework(d.hasCoursework())
-                    //     .hasCourseProject(d.hasCourseProject()).hasDesignAssignment(d.hasDesignAssignment())
-                    //     .hasEssay(d.hasEssay()).hasHomeTest(d.hasHomeTest()).hasAudienceTest(d.hasAudienceTest())
-                    //     .discipline(d.discipline()).disciplineId(d.disciplineId());
                 },
                 empty: function () {
                     self.current.discipline().id(0).semester('')
@@ -142,14 +129,6 @@ $(document).ready(function () {
                         .hasAudienceTest(true).discipline('').disciplineId(0);
                 }
             };
-            // self.current.hasSemester = {
-            //     showItem: function (index) {
-            //         if (index == 0)
-            //             return true;
-            //
-            //         return self.current.disciplines[index - 1].semester != self.current.disciplines[index].semester;
-            //     }
-            // };
             self.actions = {
                 show: function (data) {
                     var isCurrent = self.current.discipline().id() === data.id();
@@ -253,15 +232,19 @@ $(document).ready(function () {
                     }
                 },
                 sortedDiscipline : function () {
-                    let oldDisciplince = ko.mapping.toJS(self.current.disciplines());
+                    let oldDisciplines = ko.mapping.toJS(self.current.disciplines());
                     let disciplines = [];
-                    oldDisciplince.forEach(d => {
+                    oldDisciplines.forEach(d => {
                         if (disciplines.find(t => t.disciplineId === d.disciplineId))
                             d.disciplineVisible = false;
                         else d.disciplineVisible = true;
 
                         disciplines.push(d);
                     });
+                    console.log(disciplines);
+                    disciplines.forEach(d => {
+                        disciplines.sort((a,b)=>a.disciplineId > b.disciplineId);
+                    })
                     console.log(disciplines);
                     return ko.mapping.fromJS(disciplines);
                 },

@@ -6,9 +6,12 @@ table {
     border-collapse: collapse;
     border: 1px solid black;
     margin: 15px auto;
-    width: 100%;
-    overflow: scroll;
     border-spacing: 0;
+}
+
+tbody {
+    background: #EDEEF0;
+    color: #6C7A89;
 }
 
 th {
@@ -21,14 +24,23 @@ th {
     border: 1px solid #BFBFBF;
     padding: 5px 10px;
     text-align: center;
+    width: auto;
+}
+
+.filter-input {
+    border: solid #FFF;
+    max-width: 50px;
+    max-height: 20px;
+    text-align: center;
 }
 
 .petails {
     margin-top: -2px;
     height: auto;
+    float: left;
     border-top: 0.1px solid #BFBFBF;
     border-bottom: 1px solid #BFBFBF;
-    width: 100%;
+    width: 95%;
 }
 
 .cow:after {
@@ -49,16 +61,6 @@ th {
     color: #BFBFBF;
 }
 
-.filter-input {
-    margin: 0;
-    padding: 0;
-    border: 0px;
-    border-style: solid;
-    max-width: 70px;
-    max-height: 20px;
-    text-align: center;
-}
-
 .grey-title {
     font-size: 12px;
     color: #7f8c8d;
@@ -68,10 +70,8 @@ th {
 
 .table-wrapper {
     padding-top: 45px;
-    overflow-x: scroll;
-    overflow-y: visible;
     padding-bottom: 15px;
-    width: 100%;
+    width: 116.3%;
     float: left;
     position: relative;
     min-height: 1px;
@@ -79,13 +79,14 @@ th {
     padding-left: 15px;
 }
 
+
 .performance-wrapper {
     background-color: #FFFFFF;
-    margin-top: 45px;
-    width: 90%;
     padding-top: 15px;
     padding-right: 30px;
     padding-left: 15px;
+    margin-top: 45px;
+    width: 95%;
     margin-right: auto;
     margin-left: auto;
 }
@@ -139,4 +140,143 @@ th {
 
     -webkit-writing-mode: horizontal-tb !important;
 
+}
+
+/* Базовый контейнер табов */
+.tabs {
+    min-width: 320px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 120px;
+}
+/* Стили секций с содержанием */
+.tabs>section {
+    display: none;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+.tabs>section>p {
+    margin: 0 0 5px;
+    line-height: 1.5;
+    color: #383838;
+    /* прикрутим анимацию */
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+/* Описываем анимацию свойства opacity */
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* Прячем чекбоксы */
+.tabs>input {
+    display: none;
+    position: absolute;
+}
+/* Стили переключателей вкладок (табов) */
+.tabs>label {
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 25px;
+    font-weight: 600;
+    text-align: center;
+    color: #aaa;
+    border: 0px solid #ddd;
+    border-width: 1px 1px 1px 1px;
+    background: #f1f1f1;
+    border-radius: 3px 3px 0 0;
+}
+/* Шрифт-иконки от Font Awesome в формате Unicode */
+.tabs>label:before {
+    font-family: fontawesome;
+    font-weight: normal;
+    margin-right: 10px;
+}
+.tabs>label[for*="1"]:before {
+    content: "\f0c0";
+}
+.tabs>label[for*="2"]:before {
+    content: "\f108";
+}
+.tabs>label[for*="3"]:before {
+    content: "\f0c5";
+}
+
+/* Изменения стиля переключателей вкладок при наведении */
+
+.tabs>label:hover {
+    color: #888;
+    cursor: pointer;
+}
+/* Стили для активной вкладки */
+.tabs>input:checked+label {
+    color: #555;
+    border-top: 1px solid #1d75b3;
+    border-bottom: 1px solid #fff;
+    background: #fff;
+}
+/* Активация секций с помощью псевдокласса :checked */
+#tab1:checked~#content-tab1, #tab2:checked~#content-tab2, #tab3:checked~#content-tab3, #tab4:checked~#content-tab4 {
+      display: block;
+  }
+/* Убираем текст с переключателей
+* и оставляем иконки на малых экранах
+*/
+
+@media screen and (max-width: 680px) {
+    .tabs>label {
+        font-size: 0;
+    }
+    .tabs>label:before {
+        margin: 0;
+        font-size: 18px;
+    }
+}
+/* Изменяем внутренние отступы
+*  переключателей для малых экранов
+*/
+@media screen and (max-width: 400px) {
+    .tabs>label {
+        padding: 25px;
+    }
+}
+
+.state0:before {
+    content: "";
+}
+.state1:before {
+    content: "✔";
+}
+.state2:before {
+    content: "Н";
+    font-weight:bold;
+}
+.state3:before {
+    content: "Н/у";
+    font-weight:bold;
+}
+
+.info-performance{
+    white-space: nowrap;
+    font-size: 16px;
 }

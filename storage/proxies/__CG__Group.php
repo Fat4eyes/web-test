@@ -64,10 +64,10 @@ class Group extends \Group implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'prefix', 'course', 'number', 'isFulltime', 'name', 'id', 'studyplan'];
+            return ['__isInitialized__', 'prefix', 'course', 'year', 'number', 'isFulltime', 'name', 'id', 'studyplan'];
         }
 
-        return ['__isInitialized__', 'prefix', 'course', 'number', 'isFulltime', 'name', 'id', 'studyplan'];
+        return ['__isInitialized__', 'prefix', 'course', 'year', 'number', 'isFulltime', 'name', 'id', 'studyplan'];
     }
 
     /**
@@ -318,6 +318,28 @@ class Group extends \Group implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStudyplan', []);
 
         return parent::getStudyplan();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getYear()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getYear', []);
+
+        return parent::getYear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setYear($year)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setYear', [$year]);
+
+        return parent::setYear($year);
     }
 
     /**
