@@ -16,6 +16,7 @@
         <!-- /ko -->
         <div class="items-body" data-bind="foreach: $root.current.groups">
             <div class="item" data-bind="click: $root.actions.show, css: {'current' : $root.current.group().id() === id()}">
+                <span data-bind="text: year, visible: year()"></span>
                 <span data-bind="text: name"></span>
                 <span class="fa tag float-right" data-bind="click: $root.actions.moveTo.students" title="Перейти к учетным записям студентов">&#xf007;</span>
             </div>
