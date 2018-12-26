@@ -322,6 +322,7 @@ $(document).ready(function(){
                     })
                     .fail(({responseJSON}) => self.inform.show({message: responseJSON})),
                 transferAll: () => $.post('students/transfer/next/all', {})
+                    .done(() => self.get.groups())
                     .fail(({responseJSON}) => self.inform.show({message: responseJSON})),
                 transferAllIntoGroup: groupId => $.post(
                     `students/transfer/group/${groupId}`,
