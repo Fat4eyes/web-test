@@ -100,13 +100,13 @@
             <div class="filter-block">
                 <button class="action-button-pussy width-100p"
                         data-bind="click: $root.actions.transferAll">
-                    Перевести всех студентов на следущий курс
+                    Перевести всех студентов на следующий курс
                 </button>
             </div>
             <div class="filter-block">
                 <button class="action-button-pussy width-100p"
                         data-bind="click: $root.actions.transfer, enable: $root.filter.group() && $root.buttonVisibility.transferStudents()">
-                    Перевести выбранных студентов на следущий курс
+                    Перевести выбранных студентов на следующий курс
                 </button>
             </div>
             <div class="filter-block">
