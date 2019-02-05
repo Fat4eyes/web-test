@@ -4,13 +4,11 @@ body {
 
 table {
     border-collapse: collapse;
-    border: 1px solid black;
     margin: 15px auto;
     border-spacing: 0;
 }
 
 tbody {
-    background: #EDEEF0;
     color: #6C7A89;
 }
 
@@ -79,6 +77,10 @@ th {
     padding-left: 15px;
 }
 
+.perf {
+    background: #EDEEF0;
+    border: 1px solid black;
+}
 
 .performance-wrapper {
     background-color: #FFFFFF;
