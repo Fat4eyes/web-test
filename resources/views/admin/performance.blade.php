@@ -26,7 +26,7 @@
 
                         <section id="content-tab1" class="table-wrapper"
                                  data-bind="visible: $root.current.tableWidthLecture().length > 0">
-                            <table style="float: left; width: auto; border-right:none">
+                            <table style="float: left; width: auto; border-right:none" class="perf">
                                 <thead>
                                 <tr>
                                     <th style="height: 54px;">
@@ -46,7 +46,7 @@
                             </table>
 
                             <div style="overflow-y:auto; overflow-x:auto;">
-                                <table style="overflow: auto; float: left; width: 100%">
+                                <table style="overflow: auto; float: left; width: 100%" class="perf">
                                     <thead>
                                     <tr>
                                         <!-- ko foreach: $root.current.tableWidthLecture -->
@@ -76,7 +76,7 @@
 
                         <section id="content-tab2" class="table-wrapper"
                                  data-bind="visible: $root.current.tableWidthPractical().length > 0">
-                            <table style="float: left; width: auto; border-right:none">
+                            <table style="float: left; width: auto; border-right:none"  class="perf">
                                 <thead>
                                 <tr>
                                     <th style="height: 54px;">
@@ -96,7 +96,7 @@
                             </table>
 
                             <div style="overflow-y:auto; overflow-x:auto;">
-                                <table style="overflow: auto; float: left; width: 100%">
+                                <table style="overflow: auto; float: left; width: 100%"  class="perf">
                                     <thead>
                                     <tr>
                                         <!-- ko foreach: $root.current.tableWidthPractical -->
