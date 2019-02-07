@@ -133,7 +133,7 @@
                                     </th>
                                 </tr>
                                 </thead>
-                                <tbody data-bind='foreach: $root.current.students'>
+                                <tbody data-bind='foreach: $root.current.students' class="perf">
                                 <tr>
                                     <td height="40px"
                                         style="padding-bottom: 6px; padding-top: 6px;">
@@ -155,7 +155,7 @@
                                         <!-- /ko -->
                                     </tr>
                                     </thead>
-                                    <tbody data-bind='foreach: $root.current.students'>
+                                    <tbody data-bind='foreach: $root.current.students' class="perf">
                                     <tr>
                                         <!-- ko foreach: $data.studentProgresses -->
                                         <td height="40px" width="30px" style="padding: 0px">
