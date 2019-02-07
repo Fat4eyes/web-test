@@ -57,6 +57,10 @@ $(document).ready(function () {
                     workMark: ko.observable(''),
                     student: ko.observable(''),
                     disciplinePlan: ko.observable(''),
+                    formattedDate: function (notFormatedDate) {
+                        let date = notFormatedDate.split(' ')[0].split('-');
+                        return date[2] +'/'+ date[1] +'/'+ date[0].substr(2,3);
+                    },
                 }),
                 planId: ko.observable(),
                 showToggleLecture: function (index, parentIndex) {
@@ -66,8 +70,6 @@ $(document).ready(function () {
                         state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
                     }
                     this.students()[parentIndex].studentAttendances[index].visitStatus = state.slice(-1);
-                    // console.log(state.slice(-1));
-                    // console.log(this.students()[parentIndex]);
                     document.getElementById(id).className = state;
                 },
                 showTogglePractical: function (index, parentIndex) {
@@ -292,7 +294,7 @@ $(document).ready(function () {
 
                 performances: function () {
                     var url = '/api/performance/show' +
-                        '?discipline=' + self.filter.discipline().id + '&group=' + self.filter.group().id();
+                        '?discipline=' + self.filter.semester().id + '&group=' + self.filter.group().id();
 
                     var requestOptions = {
                         url: url,

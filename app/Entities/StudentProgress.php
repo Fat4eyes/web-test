@@ -1,6 +1,7 @@
 <?php
 
 
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * StudentAttendance
@@ -29,6 +30,8 @@ class StudentProgress extends BaseEntity implements JsonSerializable
 
     protected $workMark;
 
+    protected $updatedAt;
+
     public function jsonSerialize()
     {
         return array(
@@ -38,7 +41,27 @@ class StudentProgress extends BaseEntity implements JsonSerializable
             'occupationType' => $this->occupationType,
             'workNumber' => $this->workNumber,
             'workMark' => $this->workMark,
+            'updatedAt' => $this->updatedAt
         );
+    }
+
+    public function onPrePersist()
+    {
+        if($this->workMark != "")
+            $this->updatedAt = date("Y-m-d");
+    }
+
+    /**
+     * Triggered on update
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate(PreUpdateEventArgs $event)
+    {
+        if ($event->hasChangedField('workMark')) {
+            if($this->workMark != "")
+                $this->updatedAt = date("Y-m-d");
+            else $this->updatedAt = null;
+        }
     }
 
     /**
@@ -131,6 +154,21 @@ class StudentProgress extends BaseEntity implements JsonSerializable
         $this->occupationType = $occupationType;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param mixed $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
 
 }
 

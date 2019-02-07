@@ -44,13 +44,13 @@ th {
 }
 
 .cow:after {
-    clear:both
+    clear: both
 }
 
 .cow {
-    margin-bottom:15px;
-    margin-right:-15px;
-    margin-left:-15px
+    margin-bottom: 15px;
+    margin-right: -15px;
+    margin-left: -15px
 }
 
 .head-text {
@@ -78,7 +78,6 @@ th {
     padding-right: 15px;
     padding-left: 15px;
 }
-
 
 .performance-wrapper {
     background-color: #FFFFFF;
@@ -126,7 +125,7 @@ th {
 
     text-indent: 2px;
     border-radius: 2px;
-    font-family: "Roboto Regular"!important;
+    font-family: "Roboto Regular" !important;
 
     height: 30px;
     border: 1px solid #BFBFBF;
@@ -149,14 +148,16 @@ th {
     margin: 0 auto;
     padding-top: 120px;
 }
+
 /* Стили секций с содержанием */
-.tabs>section {
+.tabs > section {
     display: none;
     padding: 15px;
     background: #fff;
     border: 1px solid #ddd;
 }
-.tabs>section>p {
+
+.tabs > section > p {
     margin: 0 0 5px;
     line-height: 1.5;
     color: #383838;
@@ -168,6 +169,7 @@ th {
     -webkit-animation-name: fadeIn;
     animation-name: fadeIn;
 }
+
 /* Описываем анимацию свойства opacity */
 
 @-webkit-keyframes fadeIn {
@@ -178,6 +180,7 @@ th {
         opacity: 1;
     }
 }
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -187,14 +190,14 @@ th {
     }
 }
 
-
 /* Прячем чекбоксы */
-.tabs>input {
+.tabs > input {
     display: none;
     position: absolute;
 }
+
 /* Стили переключателей вкладок (табов) */
-.tabs>label {
+.tabs > label {
     display: inline-block;
     margin: 0 0 -1px;
     padding: 15px 25px;
@@ -206,57 +209,66 @@ th {
     background: #f1f1f1;
     border-radius: 3px 3px 0 0;
 }
+
 /* Шрифт-иконки от Font Awesome в формате Unicode */
-.tabs>label:before {
+.tabs > label:before {
     font-family: fontawesome;
     font-weight: normal;
     margin-right: 10px;
 }
-.tabs>label[for*="1"]:before {
+
+.tabs > label[for*="1"]:before {
     content: "\f0c0";
 }
-.tabs>label[for*="2"]:before {
+
+.tabs > label[for*="2"]:before {
     content: "\f108";
 }
-.tabs>label[for*="3"]:before {
+
+.tabs > label[for*="3"]:before {
     content: "\f0c5";
 }
 
 /* Изменения стиля переключателей вкладок при наведении */
 
-.tabs>label:hover {
+.tabs > label:hover {
     color: #888;
     cursor: pointer;
 }
+
 /* Стили для активной вкладки */
-.tabs>input:checked+label {
+.tabs > input:checked + label {
     color: #555;
     border-top: 1px solid #1d75b3;
     border-bottom: 1px solid #fff;
     background: #fff;
 }
+
 /* Активация секций с помощью псевдокласса :checked */
-#tab1:checked~#content-tab1, #tab2:checked~#content-tab2, #tab3:checked~#content-tab3, #tab4:checked~#content-tab4 {
-      display: block;
-  }
+#tab1:checked ~ #content-tab1, #tab2:checked ~ #content-tab2, #tab3:checked ~ #content-tab3, #tab4:checked ~ #content-tab4 {
+    display: block;
+}
+
 /* Убираем текст с переключателей
 * и оставляем иконки на малых экранах
 */
 
 @media screen and (max-width: 680px) {
-    .tabs>label {
+    .tabs > label {
         font-size: 0;
     }
-    .tabs>label:before {
+
+    .tabs > label:before {
         margin: 0;
         font-size: 18px;
     }
 }
+
 /* Изменяем внутренние отступы
 *  переключателей для малых экранов
 */
 @media screen and (max-width: 400px) {
-    .tabs>label {
+    .tabs > label {
         padding: 25px;
     }
 }
@@ -264,19 +276,39 @@ th {
 .state0:before {
     content: "";
 }
+
 .state1:before {
     content: "✔";
 }
+
 .state2:before {
     content: "Н";
-    font-weight:bold;
-}
-.state3:before {
-    content: "Н/у";
-    font-weight:bold;
+    font-weight: bold;
 }
 
-.info-performance{
+.state3:before {
+    content: "Н/у";
+    font-weight: bold;
+}
+
+.info-performance {
     white-space: nowrap;
     font-size: 16px;
 }
+
+.cell-table {
+    border: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%
+}
+
+.cell-date {
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 0px;
+    padding: 0px
+}
+
+
+

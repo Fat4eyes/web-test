@@ -46,31 +46,31 @@
                             </table>
 
                             <div style="overflow-y:auto; overflow-x:auto;">
-                            <table style="overflow: auto; float: left; width: 100%">
-                                <thead>
-                                <tr>
-                                    <!-- ko foreach: $root.current.tableWidthLecture -->
-                                    <th height="54px" width="30px">
-                                        <span class="info" data-bind="text: $data"></span>
-                                    </th>
-                                    <!-- /ko -->
-                                </tr>
-                                </thead>
-                                <tbody data-bind='foreach: $root.current.students'>
-                                <tr>
-                                    <!-- ko foreach: $data.studentAttendances -->
-                                    <!-- ko if: $data.occupationType === "lecture" -->
-                                    <span data-bind="$data.student"></span>
-                                    <td height="40px" width="30px"
-                                        rel="toggle"
-                                        data-bind="attr: {'id': 'toggleLecture'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
+                                <table style="overflow: auto; float: left; width: 100%">
+                                    <thead>
+                                    <tr>
+                                        <!-- ko foreach: $root.current.tableWidthLecture -->
+                                        <th height="54px" width="30px">
+                                            <span class="info" data-bind="text: $data"></span>
+                                        </th>
+                                        <!-- /ko -->
+                                    </tr>
+                                    </thead>
+                                    <tbody data-bind='foreach: $root.current.students'>
+                                    <tr>
+                                        <!-- ko foreach: $data.studentAttendances -->
+                                        <!-- ko if: $data.occupationType === "lecture" -->
+                                        <span data-bind="$data.student"></span>
+                                        <td height="40px" width="30px"
+                                            rel="toggle"
+                                            data-bind="attr: {'id': 'toggleLecture'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
                                                  click: function () {$root.current.showToggleLecture($index(),$parentContext.$index())}">
-                                    </td>
-                                    <!-- /ko -->
-                                    <!-- /ko -->
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                        <!-- /ko -->
+                                        <!-- /ko -->
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </section>
 
@@ -158,14 +158,28 @@
                                     <tbody data-bind='foreach: $root.current.students'>
                                     <tr>
                                         <!-- ko foreach: $data.studentProgresses -->
-                                        <td height="40px" width="30px"
-                                            rel="input">
-                                            <input  style="background: #EDEEF0; border: none"
-                                                    type="text" validate
-                                                   data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index()},
+                                        <td height="40px" width="30px" style="padding: 0px">
+                                            <table class="cell-table">
+                                                <tr>
+                                                    <td style="border: 0px; padding: 0px"
+                                                        rel="input">
+                                                        <input style="background: #EDEEF0; border: none"
+                                                               type="text" validate
+                                                               data-bind="attr: {'id': 'inputLaboratory'+$parentContext.$index()+'_'+$index()},
                                                value: $data.workMark,
                                                validationElement: workMark"
-                                                   class="filter-input">
+                                                               class="filter-input">
+                                                    </td>
+                                                </tr>
+                                                <!-- ko ifnot: $data.updatedAt == null -->
+                                                <tr>
+                                                    <td class="cell-date">
+                                                        <span style="font-size: x-small"
+                                                              data-bind="text: $root.current.studentProgress().formattedDate($data.updatedAt)"></span>
+                                                    </td>
+                                                </tr>
+                                                <!-- /ko -->
+                                            </table>
                                         </td>
                                         <!-- /ko -->
                                     </tr>
