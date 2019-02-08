@@ -132,6 +132,7 @@
         <div class="box-modal" id="remove-discipline-plan-modal">
             <div class="popup-delete">
                 <div><h3>Вы действительно хотите удалить выбранную дисциплину?</h3></div>
+                <h5 style="color: #a33137">Все данные успеваемости студентов по дисциплине будут удалены</h5>
                 <div>
                     <button class="remove arcticmodal-close" data-bind="click: $root.actions.end.remove">Удалить
                     </button>
