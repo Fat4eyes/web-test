@@ -32,6 +32,8 @@ class StudentProgress extends BaseEntity implements JsonSerializable
 
     protected $updatedAt;
 
+    protected $extraFields;
+
     public function jsonSerialize()
     {
         return array(
@@ -41,7 +43,8 @@ class StudentProgress extends BaseEntity implements JsonSerializable
             'occupationType' => $this->occupationType,
             'workNumber' => $this->workNumber,
             'workMark' => $this->workMark,
-            'updatedAt' => $this->updatedAt
+            'updatedAt' => $this->updatedAt,
+            'extraFields' => $this->extraFields
         );
     }
 
@@ -168,6 +171,22 @@ class StudentProgress extends BaseEntity implements JsonSerializable
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExtraFields()
+    {
+        return $this->extraFields;
+    }
+
+    /**
+     * @param mixed $extraFields
+     */
+    public function setExtraFields($extraFields)
+    {
+        $this->extraFields = $extraFields;
     }
 
 }
