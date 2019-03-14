@@ -29,6 +29,7 @@
             </options>
         </field>
         <field name="updatedAt" type="string" column="updated_at"/>
+        <field name="extraFields" type="string" column="extra_fields"/>
         <many-to-one field="disciplinePlan" target-entity="DisciplinePlan" fetch="LAZY">
             <join-columns>
                 <join-column name="discipline_plan_id" referenced-column-name="id"/>

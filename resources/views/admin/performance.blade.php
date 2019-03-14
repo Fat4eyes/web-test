@@ -76,7 +76,7 @@
 
                         <section id="content-tab2" class="table-wrapper"
                                  data-bind="visible: $root.current.tableWidthPractical().length > 0">
-                            <table style="float: left; width: auto; border-right:none"  class="perf">
+                            <table style="float: left; width: auto; border-right:none" class="perf">
                                 <thead>
                                 <tr>
                                     <th style="height: 54px;">
@@ -96,7 +96,7 @@
                             </table>
 
                             <div style="overflow-y:auto; overflow-x:auto;">
-                                <table style="overflow: auto; float: left; width: 100%"  class="perf">
+                                <table style="overflow: auto; float: left; width: 100%" class="perf">
                                     <thead>
                                     <tr>
                                         <!-- ko foreach: $root.current.tableWidthPractical -->
@@ -122,9 +122,16 @@
                                 </table>
                             </div>
                         </section>
-
                         <section id="content-tab3" class="table-wrapper"
                                  data-bind="visible: $root.current.tableWidthLaboratory().length > 0">
+                            <div>
+                                <span>Дополнительных полей у лабораторных: </span>
+                                <select data-bind="options: $root.current.extra().fields,
+                                      optionsText: 'name',
+                                      value: $root.current.extra().count,
+                                      optionsCaption: 'Нет'">
+                                </select>
+                            </div>
                             <table style="float: left; width: auto; border-right:none">
                                 <thead>
                                 <tr>
@@ -152,6 +159,13 @@
                                         <th height="54px" width="30px">
                                             <span class="info" data-bind="text: $data"></span>
                                         </th>
+                                        <!-- ko if: $root.current.extra().isVisible -->
+                                        <!-- ko foreach: $root.current.extra().countArray -->
+                                        <th height="54px" width="30px">
+                                            <span class="info" data-bind="text: $data"></span>
+                                        </th>
+                                        <!-- /ko -->
+                                        <!-- /ko -->
                                         <!-- /ko -->
                                     </tr>
                                     </thead>
@@ -181,6 +195,16 @@
                                                 <!-- /ko -->
                                             </table>
                                         </td>
+                                        <!-- ko if: $root.current.extra().isVisible -->
+                                        <!-- ko foreach: $root.current.extra().countArray -->
+                                        <td rel="input">
+                                            <input style="background: #EDEEF0; border: none"
+                                                   type="text"
+                                                   data-bind="value: $parentContext.$data.extraFields[$index()]"
+                                                             class="filter-input">
+                                        </td>
+                                        <!-- /ko -->
+                                        <!-- /ko -->
                                         <!-- /ko -->
                                     </tr>
                                     </tbody>

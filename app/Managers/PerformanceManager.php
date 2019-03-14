@@ -90,6 +90,7 @@ class PerformanceManager
             foreach ($studentInfo->getStudentProgresses() as $progress) {
                 $studentProgress = new StudentProgress();
                 $studentProgress->fillFromJson($progress);
+                $studentProgress->setExtraFields(implode(',',$studentProgress->getExtraFields()));
                 $studentProgress->setStudent($student);
                 $studentProgress->setDisciplinePlan($disciplinePlan);
                 $this->_unitOfWork->studentProgresses()->create($studentProgress);
@@ -122,6 +123,7 @@ class PerformanceManager
             foreach ($studentInfo->getStudentProgresses() as $progress) {
                 $studentProgress = new StudentProgress();
                 $studentProgress->fillFromJson($progress);
+                $studentProgress->setExtraFields(implode(',',$studentProgress->getExtraFields()));
                 $studentProgress->setStudent($student);
                 $studentProgress->setDisciplinePlan($disciplinePlan);
                 $this->_unitOfWork->studentProgresses()->update($studentProgress);

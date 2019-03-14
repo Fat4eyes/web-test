@@ -44,7 +44,7 @@ class StudentProgress extends BaseEntity implements JsonSerializable
             'workNumber' => $this->workNumber,
             'workMark' => $this->workMark,
             'updatedAt' => $this->updatedAt,
-            'extraFields' => $this->extraFields
+            'extraFields' => explode(',',$this->extraFields)
         );
     }
 
