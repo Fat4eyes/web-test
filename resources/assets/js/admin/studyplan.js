@@ -132,7 +132,6 @@ $(document).ready(function () {
             self.actions = {
                 show: function (data) {
                     var isCurrent = self.current.discipline().id() === data.id();
-                    console.log(isCurrent, data.id(), self.current.discipline().id());
                     if (isCurrent) {
                         self.alter.empty();
                         self.mode(state.none);
@@ -241,11 +240,9 @@ $(document).ready(function () {
 
                         disciplines.push(d);
                     });
-                    console.log(disciplines);
                     disciplines.forEach(d => {
                         disciplines.sort((a,b)=>a.disciplineId > b.disciplineId);
                     })
-                    console.log(disciplines);
                     return ko.mapping.fromJS(disciplines);
                 },
             };
