@@ -50,8 +50,6 @@ class StudentProgress extends BaseEntity implements JsonSerializable
 
     public function onPrePersist()
     {
-        if($this->workMark != "")
-            $this->updatedAt = date("Y-m-d");
     }
 
     /**
@@ -61,9 +59,9 @@ class StudentProgress extends BaseEntity implements JsonSerializable
     public function onPreUpdate(PreUpdateEventArgs $event)
     {
         if ($event->hasChangedField('workMark')) {
-            if($this->workMark != "")
+            if (!$this->updatedAt) {
                 $this->updatedAt = date("Y-m-d");
-            else $this->updatedAt = null;
+            }
         }
     }
 

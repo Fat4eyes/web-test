@@ -55,6 +55,7 @@ $(document).ready(function () {
                         workNumber: ko.observable(''),
                         occupationType: ko.observable(''),
                         workMark: ko.observable(''),
+                        updatedAt: ko.observable(''),
                         student: ko.observable(''),
                         disciplinePlan: ko.observable(''),
                         formattedDate: function (notFormatedDate) {
@@ -76,8 +77,12 @@ $(document).ready(function () {
                     }),
                     getExtraFieldsCount: function(){
                         let maxFieldCount = 0;
-                        self.current.students().forEach(student => {
+                        self.current.students().some(student => {
+                            if(student.studentProgresses.length === 0)
+                                return student;
+                            console.log(student.studentProgresses);
                             let fieldCount = student.studentProgresses[0].extraFields.length;
+                            console.log(fieldCount);
                             if (maxFieldCount < fieldCount)
                                 maxFieldCount = fieldCount;
                         });
@@ -157,6 +162,7 @@ $(document).ready(function () {
                                     studentProgress.occupationType = 'mark';
                                     studentProgress.workNumber = i;
                                     studentProgress.workMark = "";
+                                    studentProgress.updatedAt = "";
                                     studentInfo.studentProgresses.push(studentProgress);
                                 }
                             }

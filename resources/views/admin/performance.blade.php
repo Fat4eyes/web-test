@@ -142,7 +142,7 @@
                                 </thead>
                                 <tbody data-bind='foreach: $root.current.students' class="perf">
                                 <tr>
-                                    <td height="40px"
+                                    <td height="52px"
                                         style="padding-bottom: 6px; padding-top: 6px;">
                                         <span class="info-performance"
                                               data-bind="text: $root.current.student().studentInitials($data.student)"></span>
@@ -185,14 +185,14 @@
                                                                class="filter-input">
                                                     </td>
                                                 </tr>
-                                                <!-- ko ifnot: $data.updatedAt == null -->
+
                                                 <tr>
                                                     <td class="cell-date">
-                                                        <span style="font-size: x-small"
-                                                              data-bind="text: $root.current.studentProgress().formattedDate($data.updatedAt)"></span>
+                                                        <input class="cell-date-input" type="date" style="font-size: x-small"
+                                                              data-bind="value: $data.updatedAt"/>
                                                     </td>
                                                 </tr>
-                                                <!-- /ko -->
+
                                             </table>
                                         </td>
                                         <!-- ko if: $root.current.extra().isVisible -->
