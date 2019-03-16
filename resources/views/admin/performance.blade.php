@@ -63,8 +63,8 @@
                                         <span data-bind="$data.student"></span>
                                         <td height="40px" width="30px"
                                             rel="toggle"
-                                            data-bind="attr: {'id': 'toggleLecture'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
-                                                 click: function () {$root.current.showToggleLecture($index(),$parentContext.$index())}">
+                                            data-bind="attr: {'id': 'lecture'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
+                                                 click: function () {$root.current.changeAttandanceToggle('lecture',$index(),$parentContext.$index())}">
                                         </td>
                                         <!-- /ko -->
                                         <!-- /ko -->
@@ -112,8 +112,8 @@
                                         <!-- ko if: $data.occupationType === "practical" -->
                                         <td height="40px" width="30px"
                                             rel="toggle"
-                                            data-bind="attr: {'id': 'togglePractical'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
-                                                 click: function () {$root.current.showTogglePractical($index(),$parentContext.$index())}">
+                                            data-bind="attr: {'id': 'practical'+$parentContext.$index()+'_'+$index(), 'class': 'state'+$data.visitStatus},
+                                                 click: function () {$root.current.changeAttandanceToggle('practical',$index(),$parentContext.$index())}">
                                         </td>
                                         <!-- /ko -->
                                         <!-- /ko -->

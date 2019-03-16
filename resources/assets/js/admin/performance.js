@@ -58,15 +58,11 @@ $(document).ready(function () {
                         updatedAt: ko.observable(''),
                         student: ko.observable(''),
                         disciplinePlan: ko.observable(''),
+                        extraFields: ko.observableArray([]),
                         formattedDate: function (notFormatedDate) {
                             let date = notFormatedDate.split(' ')[0].split('-');
                             return date[2] + '/' + date[1] + '/' + date[0].substr(2, 3);
                         },
-                        extraFields: ko.observableArray([]),
-                        extraFieldsSplit: function (notSplitLine) {
-                            let stringArray = notSplitLine.split(',');
-                                return self.current.studentProgress().extraFields(stringArray);
-                        }
                     }),
                     planId: ko.observable(),
                     extra: ko.observable({
@@ -80,26 +76,15 @@ $(document).ready(function () {
                         self.current.students().some(student => {
                             if(student.studentProgresses.length === 0)
                                 return student;
-                            console.log(student.studentProgresses);
                             let fieldCount = student.studentProgresses[0].extraFields.length;
-                            console.log(fieldCount);
                             if (maxFieldCount < fieldCount)
                                 maxFieldCount = fieldCount;
                         });
                         return maxFieldCount;
                     },
 
-                    showToggleLecture: function (index, parentIndex) {
-                        let id = 'toggleLecture' + parentIndex + '_' + index;
-                        let state = 'state0';
-                        if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
-                            state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
-                        }
-                        this.students()[parentIndex].studentAttendances[index].visitStatus = state.slice(-1);
-                        document.getElementById(id).className = state;
-                    },
-                    showTogglePractical: function (index, parentIndex) {
-                        let id = 'togglePractical' + parentIndex + '_' + index;
+                    changeAttandanceToggle: function (type, index, parentIndex){
+                        let id = type + parentIndex + '_' + index;
                         let state = 'state0';
                         if (!(document.getElementById(id).className.toString().slice(-1) === '3')) {
                             state = 'state' + (Number(document.getElementById(id).className.toString().slice(-1)) + 1);
@@ -118,7 +103,6 @@ $(document).ready(function () {
                     },
                     fill: function (d) {
                         let oldStudents = ko.mapping.toJS(d);
-                        console.log(d);
                         oldStudents.forEach(studentInfo => {
 
                             if (studentInfo.studentAttendances.length > 0) {
@@ -422,9 +406,6 @@ $(document).ready(function () {
                 self.actions = {
                     update: function () {
                         self.post.performances();
-                        // self.current.discipline.isValid()
-                        //     ? self.post.discipline()
-                        //     : self.validation[$('[accept-validation]').attr('id')].open();
                     },
                     cancel: function () {
                         self.get.performances();
