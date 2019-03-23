@@ -10,7 +10,7 @@ class CreateFileTable extends Migration
     {
         Schema::create('file', function (Blueprint $table) {
             $table->increments('id');
-            $table->guid('guid');
+            $table->uuid('guid');
             $table->string('name');
             $table->smallInteger('type');
         });
