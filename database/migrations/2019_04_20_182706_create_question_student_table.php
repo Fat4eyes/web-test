@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePassedQuestionTable extends Migration
+class CreateQuestionStudentTable extends Migration
 {
     public function up()
     {
-        Schema::create('passed_question', function (Blueprint $table)
+        Schema::create('question_student', function (Blueprint $table)
         {
             $table->increments('id');
             $table->integer('student_id')->unsigned();
@@ -31,7 +31,7 @@ class CreatePassedQuestionTable extends Migration
 
     public function down()
     {
-        Schema::table('passed_question', function (Blueprint $table) {
+        Schema::table('question_student', function (Blueprint $table) {
             $table->dropForeign(['student_id']);
             $table->dropForeign(['question_id']);
         });
