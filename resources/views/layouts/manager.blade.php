@@ -22,9 +22,7 @@
     </div>
     <div class="menu">
         <a href="/admin/main" data-bind="css: {'current': $root.page() === menu.admin.main}">Главная</a>
-        <!-- ko if: $root.user.role() === role.admin.name -->
         <a href="/admin/lecturers" data-bind="css: {'current': $root.page() === menu.admin.lecturers}">Преподаватели</a>
-        <!-- /ko -->
         <a href="/admin/groups" data-bind="css: {'current': $root.page() === menu.admin.groups}">Группы</a>
         <a href="/admin/students" data-bind="css: {'current': $root.page() === menu.admin.students}">Студенты</a>
         <a href="/admin/disciplines" data-bind="css: {'current': $root.page() === menu.admin.disciplines}">Дисциплины</a>
@@ -32,6 +30,7 @@
         <a href="/admin/results" data-bind="css: {'current': $root.page() === menu.admin.results}">Результаты</a>
         <a href="/admin/performance" data-bind="css: {'current': $root.page() === menu.admin.performance}">Успеваемость</a>
         <a href="/admin/materials" data-bind="css: {'current': $root.page() === menu.admin.materials}">Материалы</a>
+        <a href="https://localhost:5001/learning">Обучение</a>
         <a  class="user" data-bind="text: $root.user.name()"></a>
         <div class="menu-dd">
             <!-- ko if: $root.user.role() === role.admin.name -->
