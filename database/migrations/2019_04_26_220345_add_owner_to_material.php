@@ -12,7 +12,8 @@ class AddOwnerToMaterial extends Migration
         {
             $table
                 ->integer('owner_id')
-                ->unsigned();
+                ->unsigned()
+                ->nullable();
 
             $table
                 ->foreign('owner_id')
