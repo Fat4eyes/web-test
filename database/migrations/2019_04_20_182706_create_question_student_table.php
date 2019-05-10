@@ -36,6 +36,6 @@ class CreateQuestionStudentTable extends Migration
             $table->dropForeign(['question_id']);
         });
 
-        Schema::drop('passed_question');
+        Schema::drop('question_student');
     }
 }
